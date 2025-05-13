@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/taskmanager
+    username: gisung
+    password: 1234
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6380
+
+jwt:
+  secretKey: gisung-project-taskmanagersystem-jwt-secret-key
+  access:
+    expiration: 3600000 # ???? 30?
+
+  refresh:
+    expiration: 604800000 # ???? 1?
+
+kafka:
+  bootstrap-server:
+    - localhost:10000
+    - localhost:10001
+    - localhost:10002
