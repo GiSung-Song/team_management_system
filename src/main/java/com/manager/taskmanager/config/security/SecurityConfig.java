@@ -1,9 +1,11 @@
-package com.manager.taskmanager.config;
+package com.manager.taskmanager.config.security;
 
-import com.manager.taskmanager.jwt.JwtTokenFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -18,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
+@Profile("!test")
 public class SecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
@@ -31,12 +34,22 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests((request) ->
-                        request.anyRequest().permitAll())
+                        request.requestMatchers(HttpMethod.POST, "/api/department").hasRole("MANAGER")
+                                .requestMatchers(HttpMethod.DELETE, "/api/department/**").hasRole("MANAGER")
+                                .requestMatchers("/api/department", "/api/auth/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
+                                .anyRequest().authenticated()
+                )
                 .csrf(CsrfConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
                 .formLogin(FormLoginConfigurer::disable)
                 .sessionManagement((session) ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling((exception) ->
+                        exception.authenticationEntryPoint((request, response, authException) -> {
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+                        })
+                )
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

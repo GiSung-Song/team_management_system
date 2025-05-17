@@ -1,4 +1,4 @@
-package com.manager.taskmanager.member;
+package com.manager.taskmanager.member.entity;
 
 public enum Role {
     MANAGER("ROLE_MANAGER"), MEMBER("ROLE_MEMBER");

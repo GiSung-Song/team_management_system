@@ -1,5 +1,6 @@
-package com.manager.taskmanager.jwt;
+package com.manager.taskmanager.config.security;
 
+import com.manager.taskmanager.member.entity.Position;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,5 @@ public class JwtPayloadDto {
     private String department;
     private String employeeNumber;
     private String role;
-    private Integer level;
+    private Position position;
 }

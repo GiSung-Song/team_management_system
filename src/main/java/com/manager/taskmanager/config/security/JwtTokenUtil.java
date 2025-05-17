@@ -1,8 +1,9 @@
-package com.manager.taskmanager.jwt;
+package com.manager.taskmanager.config.security;
 
 import com.manager.taskmanager.common.CustomException;
 import com.manager.taskmanager.common.ErrorCode;
-import com.manager.taskmanager.member.Role;
+import com.manager.taskmanager.member.entity.Position;
+import com.manager.taskmanager.member.entity.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -62,7 +63,7 @@ public class JwtTokenUtil {
             throw new CustomException(ErrorCode.MISSING_REQUIRED_FIELD);
         }
 
-        if (jwtPayloadDto.getLevel() == null) {
+        if (jwtPayloadDto.getPosition() == null) {
             log.error(">>> 직급은 필수 입력 값 입니다. <<<");
 
             throw new CustomException(ErrorCode.MISSING_REQUIRED_FIELD);
@@ -71,7 +72,9 @@ public class JwtTokenUtil {
         return Jwts.builder()
                 .setSubject(jwtPayloadDto.getEmployeeNumber())
                 .claim("department", jwtPayloadDto.getDepartment())
-                .claim("level", jwtPayloadDto.getLevel())
+                .claim("position", jwtPayloadDto.getPosition().name())
+                .claim("positionKorean", jwtPayloadDto.getPosition().getKorean())
+                .claim("level", jwtPayloadDto.getPosition().getLevel())
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpiration))
                 .setIssuedAt(new Date())
                 .signWith(secretKey)
@@ -162,12 +165,12 @@ public class JwtTokenUtil {
 
         String employeeNumber = body.getSubject();
         String department = (String) body.get("department");
-        Integer level = (Integer) body.get("level");
+        String position = (String) body.get("position");
 
         JwtPayloadDto jwtPayloadDto = new JwtPayloadDto();
         jwtPayloadDto.setEmployeeNumber(employeeNumber);
         jwtPayloadDto.setDepartment(department);
-        jwtPayloadDto.setLevel(level);
+        jwtPayloadDto.setPosition(Position.valueOf(position));
 
         return jwtPayloadDto;
     }

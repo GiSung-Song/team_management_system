@@ -1,14 +1,17 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/taskmanager
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/task_manager?serverTimezone=UTC
     username: gisung
     password: 1234
 
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
     hibernate:
       ddl-auto: create
+      dialect: org.hibernate.dialect.MySQLDialect
+    generate-ddl: false
+    show-sql: true
+    open-in-view: false
     properties:
       hibernate:
         format_sql: true
@@ -21,10 +24,10 @@ spring:
 jwt:
   secretKey: gisung-project-taskmanagersystem-jwt-secret-key
   access:
-    expiration: 3600000 # ???? 30?
+    expiration: 3600000
 
   refresh:
-    expiration: 604800000 # ???? 1?
+    expiration: 604800000
 
 kafka:
   bootstrap-server:
