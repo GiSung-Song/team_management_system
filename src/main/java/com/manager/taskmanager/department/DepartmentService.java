@@ -18,9 +18,9 @@ public class DepartmentService {
     private final DepartmentRepository departmentRepository;
 
     @Transactional
-    @CacheEvict(value = "departmentList", key = "'departmentList'")
+    @CacheEvict(value = "departments", key = "'all'")
     public void registerDepartment(DepartmentRegisterDto dto) {
-        if (departmentRepository.findByDepartmentName(dto.getDepartmentName()).isPresent()) {
+        if (departmentRepository.existsByDepartmentName(dto.getDepartmentName())) {
             throw new CustomException(ErrorCode.DEPARTMENT_DUPLICATE);
         }
 
@@ -32,7 +32,7 @@ public class DepartmentService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "departmentList", key = "'departmentList'")
+    @Cacheable(value = "departments", key = "'all'")
     public AllDepartmentListDto getAllDepartment() {
         return new AllDepartmentListDto(departmentRepository.findAll().stream()
                 .map(department -> new DepartmentDto(department.getId(), department.getDepartmentName()))
@@ -40,7 +40,7 @@ public class DepartmentService {
     }
 
     @Transactional
-    @CacheEvict(value = "departmentList", key = "'departmentList'")
+    @CacheEvict(value = "departments", key = "'all'")
     public void deleteDepartment(Long departmentId) {
         Department department = departmentRepository.findById(departmentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DEPARTMENT_NOT_FOUND));

@@ -1,15 +1,15 @@
 package com.manager.taskmanager.department;
 
 import com.manager.taskmanager.common.CustomException;
-import com.manager.taskmanager.config.DBContainerConfig;
+import com.manager.taskmanager.config.DBContainerExtension;
 import com.manager.taskmanager.department.dto.AllDepartmentListDto;
 import com.manager.taskmanager.department.dto.DepartmentRegisterDto;
 import com.manager.taskmanager.department.entity.Department;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ActiveProfiles("test")
 @Transactional
 @SpringBootTest
-@Import(DBContainerConfig.class)
+@ExtendWith(DBContainerExtension.class)
 class DepartmentServiceTest {
 
     @Autowired

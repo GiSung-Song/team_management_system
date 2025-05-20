@@ -1,18 +1,17 @@
 package com.manager.taskmanager.department;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manager.taskmanager.config.DBContainerConfig;
+import com.manager.taskmanager.config.DBContainerExtension;
 import com.manager.taskmanager.department.dto.DepartmentRegisterDto;
 import com.manager.taskmanager.department.entity.Department;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -30,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
-@Import(DBContainerConfig.class)
+@ExtendWith(DBContainerExtension.class)
 @AutoConfigureMockMvc
 public class DepartmentIntegrationTest {
 
@@ -107,7 +106,7 @@ public class DepartmentIntegrationTest {
         }
 
         @Test
-        @DisplayName("중복 값 요청 시 400 반환")
+        @DisplayName("중복 값 요청 시 409 반환")
         @WithMockUser(roles = "MANAGER")
         void whenDepartmentNameIsDuplicated_thenReturnBadRequest() throws Exception {
             DepartmentRegisterDto dto = new DepartmentRegisterDto("HR");
@@ -115,7 +114,7 @@ public class DepartmentIntegrationTest {
             mockMvc.perform(post("/api/department")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isConflict())
                     .andDo(print());
         }
 
