@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -21,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @RequiredArgsConstructor
 @Profile("!test")
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
@@ -33,12 +36,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .authorizeHttpRequests((request) ->
-                        request.requestMatchers(HttpMethod.POST, "/api/department").hasRole("MANAGER")
-                                .requestMatchers(HttpMethod.DELETE, "/api/department/**").hasRole("MANAGER")
-                                .requestMatchers("/api/department", "/api/auth/login").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
-                                .anyRequest().authenticated()
+                .authorizeHttpRequests((request) -> request
+                        .requestMatchers(HttpMethod.POST, "/api/department").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/department/**").hasRole("MANAGER")
+
+                        .requestMatchers(HttpMethod.GET, "/api/department").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/member").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/member").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/member/**").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/api/member/**").authenticated()
+
+                        .requestMatchers(HttpMethod.POST, "/api/member/*/password/reset").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/member/**").hasRole("MANAGER")
+                        .anyRequest().authenticated()
                 )
                 .csrf(CsrfConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)

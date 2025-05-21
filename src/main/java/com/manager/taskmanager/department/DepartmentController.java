@@ -2,7 +2,6 @@ package com.manager.taskmanager.department;
 
 import com.manager.taskmanager.common.ApiResult;
 import com.manager.taskmanager.department.dto.AllDepartmentListDto;
-import com.manager.taskmanager.department.dto.DepartmentDto;
 import com.manager.taskmanager.department.dto.DepartmentRegisterDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,9 +37,10 @@ public class DepartmentController {
     @Operation(summary = "부서 등록", description = "부서를 새로 등록합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "부서 등록 성공"),
-            @ApiResponse(responseCode = "400", description = "잘못된 요청(유효성 검사 실패, 이미 등록된 부서)"),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청(유효성 검사 실패)"),
             @ApiResponse(responseCode = "401", description = "로그인하지 않은 사용자"),
-            @ApiResponse(responseCode = "403", description = "접근 권한 없음(관리자 전용)")
+            @ApiResponse(responseCode = "403", description = "접근 권한 없음(관리자 전용)"),
+            @ApiResponse(responseCode = "409", description = "잘못된 요청(중복된 이름)")
     })
     @PostMapping
     public ResponseEntity<ApiResult<Void>> registerDepartment(@RequestBody @Valid DepartmentRegisterDto dto) {

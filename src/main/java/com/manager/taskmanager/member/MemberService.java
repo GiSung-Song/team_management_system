@@ -25,6 +25,19 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberQueryRepository memberQueryRepository;
 
+    // 회원 목록 조건 조회
+    @Transactional(readOnly = true)
+    public List<MemberListDto> getMemberList(String departmentName, String name, boolean isManager) {
+        List<Member> allMemberList =
+                memberQueryRepository.getAllMemberList(departmentName, name, isManager);
+
+        List<MemberListDto> memberList = allMemberList.stream()
+                .map(member -> MemberListDto.from(member))
+                .collect(Collectors.toList());
+
+        return memberList;
+    }
+
     // 회원 가입
     @Transactional
     public void registerMember(MemberRegisterDto dto) {
@@ -139,16 +152,4 @@ public class MemberService {
         return memberResponseDto;
     }
 
-    // 회원 목록 조건 조회
-    @Transactional(readOnly = true)
-    public List<MemberListDto> getMemberList(String departmentName, String name, boolean isManager) {
-        List<Member> allMemberList =
-                memberQueryRepository.getAllMemberList(departmentName, name, isManager);
-
-        List<MemberListDto> memberList = allMemberList.stream()
-                .map(member -> MemberListDto.from(member))
-                .collect(Collectors.toList());
-
-        return memberList;
-    }
 }

@@ -37,6 +37,12 @@ public class JwtTokenUtil {
 
     // AccessToken 생성
     public String generateAccessToken(JwtPayloadDto jwtPayloadDto) {
+        if (jwtPayloadDto.getId() == null) {
+            log.error(">>> ID는 필수 입력 값 입니다. <<<");
+
+            throw new CustomException(ErrorCode.MISSING_REQUIRED_FIELD);
+        }
+
         if (!StringUtils.hasText(jwtPayloadDto.getEmployeeNumber())) {
             log.error(">>> 사번은 필수 입력 값 입니다. <<<");
 
@@ -57,7 +63,7 @@ public class JwtTokenUtil {
 
         Role role = Role.from(jwtPayloadDto.getRole());
 
-        if (role == null || !StringUtils.hasText(role.name())) {
+        if (role == null || !StringUtils.hasText(role.getValue())) {
             log.error(">>> 권한은 필수 입력 값 입니다. <<<");
 
             throw new CustomException(ErrorCode.MISSING_REQUIRED_FIELD);
@@ -72,6 +78,8 @@ public class JwtTokenUtil {
         return Jwts.builder()
                 .setSubject(jwtPayloadDto.getEmployeeNumber())
                 .claim("department", jwtPayloadDto.getDepartment())
+                .claim("memberId", jwtPayloadDto.getId())
+                .claim("role", role.getValue())
                 .claim("position", jwtPayloadDto.getPosition().name())
                 .claim("positionKorean", jwtPayloadDto.getPosition().getKorean())
                 .claim("level", jwtPayloadDto.getPosition().getLevel())
@@ -164,6 +172,8 @@ public class JwtTokenUtil {
                 .getBody();
 
         String employeeNumber = body.getSubject();
+        Long memberId = (Long) body.get("memberId");
+        String role = (String) body.get("role");
         String department = (String) body.get("department");
         String position = (String) body.get("position");
 

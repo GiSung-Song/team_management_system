@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JwtPayloadDto {
+    private Long id;
     private String department;
     private String employeeNumber;
     private String role;

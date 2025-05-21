@@ -59,6 +59,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         JwtPayloadDto jwtPayloadDto = jwtTokenUtil.getJwtPayloadDto(accessToken);
 
+        Long id = jwtPayloadDto.getId();
         String employeeNumber = jwtPayloadDto.getEmployeeNumber();
         String role = jwtPayloadDto.getRole();
 
@@ -70,8 +71,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
+        CustomUserDetails customUserDetails = new CustomUserDetails(id, employeeNumber, role);
+
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                employeeNumber,
+                customUserDetails,
                 null,
                 List.of(new SimpleGrantedAuthority(role))
         );
