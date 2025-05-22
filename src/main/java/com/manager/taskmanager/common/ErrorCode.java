@@ -20,6 +20,11 @@ public enum ErrorCode {
     EMPLOYEE_NUMBER_DUPLICATE(HttpStatus.CONFLICT, "EMPLOYEE_NUMBER_DUPLICATE", "이미 등록된 사번입니다."),
     EMAIL_DUPLICATE(HttpStatus.CONFLICT, "EMAIL_DUPLICATE", "이미 등록된 이메일입니다."),
     PHONE_NUMBER_DUPLICATE(HttpStatus.CONFLICT, "PHONE_NUMBER_DUPLICATE", "이미 등록된 휴대폰 번호입니다."),
+
+    // AUTH
+    INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "INVALID_CREDENTIALS", "아이디나 비밀번호가 틀렸습니다."),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "INVALID_TOKEN", "토큰이 유효하지 않습니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "EXPIRED_TOKEN", "토큰이 만료되었습니다."),
     ;
 
     private final HttpStatus httpStatus;

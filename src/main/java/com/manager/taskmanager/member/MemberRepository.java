@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
+    Optional<Member> findByEmployeeNumberAndDeletedAtIsNull(String employeeNumber);
     Optional<Member> findByIdAndDeletedAtIsNull(Long memberId);
     boolean existsByEmployeeNumber(String employeeNumber);
     boolean existsByEmail(String email);

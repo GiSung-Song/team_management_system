@@ -57,7 +57,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        JwtPayloadDto jwtPayloadDto = jwtTokenUtil.getJwtPayloadDto(accessToken);
+        JwtPayloadDto jwtPayloadDto = jwtTokenUtil.parseAccessToken(accessToken);
 
         Long id = jwtPayloadDto.getId();
         String employeeNumber = jwtPayloadDto.getEmployeeNumber();

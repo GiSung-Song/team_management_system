@@ -55,15 +55,9 @@ public class JwtTokenUtil {
             throw new CustomException(ErrorCode.MISSING_REQUIRED_FIELD);
         }
 
-        if (!StringUtils.hasText(jwtPayloadDto.getRole())) {
-            log.error(">>> 권한은 필수 입력 값 입니다. <<<");
-
-            throw new CustomException(ErrorCode.MISSING_REQUIRED_FIELD);
-        }
-
         Role role = Role.from(jwtPayloadDto.getRole());
 
-        if (role == null || !StringUtils.hasText(role.getValue())) {
+        if (role == null) {
             log.error(">>> 권한은 필수 입력 값 입니다. <<<");
 
             throw new CustomException(ErrorCode.MISSING_REQUIRED_FIELD);
@@ -137,11 +131,11 @@ public class JwtTokenUtil {
         } catch (ExpiredJwtException e) {
             log.error(">>> 토큰이 만료되었습니다. <<<");
 
-            return null;
+            throw new CustomException(ErrorCode.EXPIRED_TOKEN);
         } catch (Exception e) {
             log.error(">>> 토큰이 유효하지 않습니다. <<<");
 
-            return null;
+            throw new CustomException(ErrorCode.INVALID_TOKEN);
         }
     }
 
@@ -163,21 +157,28 @@ public class JwtTokenUtil {
         }
     }
 
-    // 토큰 정보
-    public JwtPayloadDto getJwtPayloadDto(String token) {
+    // Refresh Token 만료 시간
+    public Long getRefreshTokenExpiration() {
+         return refreshTokenExpiration;
+    }
+
+    // Access Token 토큰 정보
+    public JwtPayloadDto parseAccessToken(String accessToken) {
         Claims body = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(accessToken)
                 .getBody();
 
         String employeeNumber = body.getSubject();
-        Long memberId = (Long) body.get("memberId");
+        Long memberId = ((Integer) body.get("memberId")).longValue();
         String role = (String) body.get("role");
         String department = (String) body.get("department");
         String position = (String) body.get("position");
 
         JwtPayloadDto jwtPayloadDto = new JwtPayloadDto();
+        jwtPayloadDto.setId(memberId);
+        jwtPayloadDto.setRole(role);
         jwtPayloadDto.setEmployeeNumber(employeeNumber);
         jwtPayloadDto.setDepartment(department);
         jwtPayloadDto.setPosition(Position.valueOf(position));
@@ -185,4 +186,14 @@ public class JwtTokenUtil {
         return jwtPayloadDto;
     }
 
+    // Refresh Token 정보
+    public String parseRefreshToken(String refreshToken) {
+        Claims body = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(refreshToken)
+                .getBody();
+
+        return body.getSubject();
+    }
 }

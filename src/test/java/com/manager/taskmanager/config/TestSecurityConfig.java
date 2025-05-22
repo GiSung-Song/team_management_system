@@ -31,10 +31,13 @@ public class TestSecurityConfig {
 
                         .requestMatchers(HttpMethod.GET, "/api/department").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/member").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/member").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/member/**").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/api/member/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/reIssue").authenticated()
+                        .requestMatchers(HttpMethod.POST, "api/auth/logout").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/api/member/*/password/reset").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/api/member/**").hasRole("MANAGER")

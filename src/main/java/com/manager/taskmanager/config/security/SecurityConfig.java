@@ -1,12 +1,12 @@
 package com.manager.taskmanager.config.security;
 
+import com.manager.taskmanager.config.CorsConfig;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,6 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
+    private final CorsConfig corsConfig;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -42,15 +43,20 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.GET, "/api/department").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/member").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/member").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/member/**").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/api/member/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/reIssue").authenticated()
+                        .requestMatchers(HttpMethod.POST, "api/auth/logout").authenticated()
 
                         .requestMatchers(HttpMethod.POST, "/api/member/*/password/reset").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/api/member/**").hasRole("MANAGER")
                         .anyRequest().authenticated()
                 )
+                .cors(cors -> cors
+                        .configurationSource(corsConfig.corsConfigurationSource()))
                 .csrf(CsrfConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
                 .formLogin(FormLoginConfigurer::disable)
