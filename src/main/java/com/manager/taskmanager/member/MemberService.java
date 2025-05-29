@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -152,4 +153,18 @@ public class MemberService {
         return memberResponseDto;
     }
 
+    @Transactional(readOnly = true)
+    public List<Member> getAllActiveMember(List<Long> memberIds) {
+        if (memberIds == null || memberIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return memberRepository.findAllByIdInAndDeletedAtIsNull(memberIds);
+    }
+
+    @Transactional(readOnly = true)
+    public Member getActiveMemberById(Long memberId) {
+        return memberRepository.findByIdAndDeletedAtIsNull(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
 }

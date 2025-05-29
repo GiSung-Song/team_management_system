@@ -76,7 +76,6 @@ public class JwtTokenUtil {
                 .claim("role", role.getValue())
                 .claim("position", jwtPayloadDto.getPosition().name())
                 .claim("positionKorean", jwtPayloadDto.getPosition().getKorean())
-                .claim("level", jwtPayloadDto.getPosition().getLevel())
                 .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpiration))
                 .setIssuedAt(new Date())
                 .signWith(secretKey)
@@ -174,14 +173,12 @@ public class JwtTokenUtil {
         Long memberId = ((Integer) body.get("memberId")).longValue();
         String role = (String) body.get("role");
         String department = (String) body.get("department");
-        String position = (String) body.get("position");
 
         JwtPayloadDto jwtPayloadDto = new JwtPayloadDto();
         jwtPayloadDto.setId(memberId);
         jwtPayloadDto.setRole(role);
         jwtPayloadDto.setEmployeeNumber(employeeNumber);
         jwtPayloadDto.setDepartment(department);
-        jwtPayloadDto.setPosition(Position.valueOf(position));
 
         return jwtPayloadDto;
     }
