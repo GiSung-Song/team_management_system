@@ -2,7 +2,6 @@ package com.manager.taskmanager.project;
 
 import com.manager.taskmanager.common.CustomException;
 import com.manager.taskmanager.common.ErrorCode;
-import com.manager.taskmanager.member.MemberRepository;
 import com.manager.taskmanager.member.MemberService;
 import com.manager.taskmanager.member.entity.Member;
 import com.manager.taskmanager.project.dto.ProjectDetailDto;
@@ -17,6 +16,7 @@ import com.manager.taskmanager.projectmember.entity.ProjectRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,10 +71,15 @@ public class ProjectService {
         );
     }
 
-    // 프로젝트 목록 조회(조건 : 프로젝트명, 소속된 멤버 이름, 프로젝트 상황)
+    // 프로젝트 목록 조회(조건 : 프로젝트명, 소속된 멤버 이름, 프로젝트 상태)
     @Transactional(readOnly = true)
-    public ProjectListDto getProjectList(String projectName, String memberName, ProjectStatus projectStatus) {
-        List<Project> projectList = projectQueryRepository.getProjectList(projectName, memberName, projectStatus);
+    public ProjectListDto getProjectList(String projectName, String memberName, String projectStatus) {
+        ProjectStatus status = null;
+        if (StringUtils.hasText(projectStatus)) {
+            status = ProjectStatus.from(projectStatus);
+        }
+
+        List<Project> projectList = projectQueryRepository.getProjectList(projectName, memberName, status);
 
         List<ProjectListDto.ProjectInfo> projectInfo = projectList.stream()
                 .map(m ->
@@ -90,8 +95,9 @@ public class ProjectService {
     // 프로젝트 상세 조회
     @Transactional(readOnly = true)
     public ProjectDetailDto getProjectDetail(Long projectId) {
-        projectRepository.findById(projectId)
-                .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+        if (!projectRepository.existsById(projectId)) {
+            throw new CustomException(ErrorCode.PROJECT_NOT_FOUND);
+        }
 
         return projectQueryRepository.getProjectDetail(projectId);
     }

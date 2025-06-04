@@ -1,0 +1,113 @@
+package com.manager.taskmanager.config;
+
+import com.manager.taskmanager.config.security.CustomUserDetails;
+import com.manager.taskmanager.department.DepartmentRepository;
+import com.manager.taskmanager.department.entity.Department;
+import com.manager.taskmanager.member.MemberRepository;
+import com.manager.taskmanager.member.entity.Member;
+import com.manager.taskmanager.member.entity.Position;
+import com.manager.taskmanager.member.entity.Role;
+import com.manager.taskmanager.project.ProjectRepository;
+import com.manager.taskmanager.project.entity.Project;
+import com.manager.taskmanager.project.entity.ProjectStatus;
+import com.manager.taskmanager.projectmember.entity.ProjectMember;
+import com.manager.taskmanager.projectmember.entity.ProjectRole;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Component
+public class TestDataFactory {
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    public Department createDepartment() {
+        Department department = Department.builder()
+                .departmentName("HR")
+                .build();
+
+        return departmentRepository.save(department);
+    }
+
+    public Member createMember(Department department) {
+        Member member = Member.createMember(
+                "emp-0002", "password", "member", "member@email.com",
+                "01056785678", Position.ASSISTANT_MANAGER, department
+        );
+
+        return memberRepository.save(member);
+    }
+
+    public Member createManager(Department department) {
+        Member manager = Member.createMember(
+                "emp-0003", "password", "manager", "manager@email.com",
+                "01013572468", Position.GENERAL_MANAGER, department
+        );
+
+        return memberRepository.save(manager);
+    }
+
+    public Member createLeader(Department department) {
+        Member leader = Member.createMember(
+                "emp-0001", "password", "leader", "leader@email.com",
+                "01012341234", Position.DIRECTOR, department
+        );
+
+        return memberRepository.save(leader);
+    }
+
+    public Project createProject(Member leader, Member member) {
+        LocalDate now = LocalDate.now();
+        LocalDate start = now.plusDays(1);
+        LocalDate end = now.plusWeeks(15);
+
+        Project project = Project.builder()
+                .projectName("test-project")
+                .description("test-description")
+                .startDate(start)
+                .endDate(end)
+                .projectStatus(ProjectStatus.PENDING)
+                .build();
+
+        ProjectMember projectLeader = ProjectMember.createMember(
+                leader, ProjectRole.LEADER, start, end
+        );
+
+        ProjectMember projectMember = ProjectMember.createMember(
+                member, ProjectRole.MEMBER, now.plusWeeks(5), now.plusWeeks(10)
+        );
+
+        project.addProjectMember(projectLeader);
+        project.addProjectMember(projectMember);
+
+        return projectRepository.save(project);
+    }
+
+    public void setAuthentication(Member member, Role role) {
+        CustomUserDetails customUserDetails = new CustomUserDetails(member.getId(), member.getEmployeeNumber(), role.getValue());
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                customUserDetails,
+                null,
+                List.of(new SimpleGrantedAuthority(role.getValue()))
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+    }
+
+    public void clearAuthentication() {
+        SecurityContextHolder.clearContext();
+    }
+}

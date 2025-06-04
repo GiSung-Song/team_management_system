@@ -10,10 +10,10 @@ import com.manager.taskmanager.projectmember.dto.ProjectMemberUpdateDto;
 import com.manager.taskmanager.projectmember.entity.ProjectMember;
 import com.manager.taskmanager.projectmember.entity.ProjectRole;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,11 +63,16 @@ public class ProjectMemberService {
                 continue;
             }
 
+            LocalDate startDate = projectMemberDto.getStartDate();
+            LocalDate endDate = projectMemberDto.getEndDate();
+
+            checkProjectDate(startDate, endDate, project.getStartDate(), project.getEndDate());
+
             ProjectMember pm = ProjectMember.createMember(
                     member,
                     ProjectRole.valueOf(projectMemberDto.getProjectRole()),
-                    projectMemberDto.getStartDate(),
-                    projectMemberDto.getEndDate()
+                    startDate,
+                    endDate
             );
 
             project.addProjectMember(pm);
@@ -96,8 +101,12 @@ public class ProjectMemberService {
         ProjectMember projectMember = projectMemberQueryRepository.getProjectMember(memberId, projectId);
 
         if (projectMember == null) {
-            throw new CustomException(ErrorCode.PROJECT_MEMBER_CANNOT_BE_DELETED);
+            throw new CustomException(ErrorCode.PROJECT_MEMBER_NOT_FOUND);
         }
+
+        Project project = projectMember.getProject();
+
+        checkProjectDate(dto.getStartDate(), dto.getEndDate(), project.getStartDate(), project.getEndDate());
 
         projectMember.updateProjectMember(
                 dto.getStartDate(), dto.getEndDate(), ProjectRole.valueOf(dto.getProjectRole())
@@ -105,8 +114,6 @@ public class ProjectMemberService {
     }
 
     // 프로젝트 권한 체크 및 조회
-    @Transactional(readOnly = true)
-    @Cacheable(value = "project_members", key = "#memberId + ':' + #projectId")
     public ProjectMember getProjectMemberAndCheckLeader(Long memberId, Long projectId) {
         ProjectMember projectMember = projectMemberQueryRepository.getProjectMember(memberId, projectId);
 
@@ -115,5 +122,12 @@ public class ProjectMemberService {
         }
 
         return projectMember;
+    }
+
+    // 프로젝트 허용일 체크
+    public void checkProjectDate(LocalDate startDate, LocalDate endDate, LocalDate projectStartDate, LocalDate projectEndDate) {
+        if (startDate.isBefore(projectStartDate) || endDate.isAfter(projectEndDate)) {
+            throw new CustomException(ErrorCode.INVALID_PROJECT_DATE);
+        }
     }
 }

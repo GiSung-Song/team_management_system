@@ -12,7 +12,11 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
-@Table(name = "project_members")
+@Table(
+        name = "project_members",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"project_id", "member_id"})
+        })
 public class ProjectMember {
 
     @Id

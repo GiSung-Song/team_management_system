@@ -3,6 +3,7 @@ package com.manager.taskmanager.projectmember.dto;
 import com.manager.taskmanager.common.ValidEnum;
 import com.manager.taskmanager.projectmember.entity.ProjectRole;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.List;
 @Schema(description = "프로젝트 멤버 추가 Request DTO")
 public class ProjectMemberRegisterDto {
 
+    @Valid
     @NotEmpty(message = "최소 한 명 이상 등록하세요.")
     List<ProjectMemberDto> projectMemberDtoList = new ArrayList<>();
 
