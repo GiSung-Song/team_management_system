@@ -62,7 +62,7 @@ class ProjectMemberControllerTest {
                     )
             );
 
-            mockMvc.perform(post("/api/project/{projectId}/member", 1L)
+            mockMvc.perform(post("/api/projects/{projectId}/member", 1L)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isCreated())
@@ -81,7 +81,7 @@ class ProjectMemberControllerTest {
                     )
             );
 
-            mockMvc.perform(post("/api/project/{projectId}/member", 1L)
+            mockMvc.perform(post("/api/projects/{projectId}/member", 1L)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isBadRequest())
@@ -101,7 +101,7 @@ class ProjectMemberControllerTest {
             ProjectMemberUpdateDto projectMemberUpdateDto =
                     new ProjectMemberUpdateDto(ProjectRole.MANAGER.name(), LocalDate.now(), LocalDate.now().plusMonths(5));
 
-            mockMvc.perform(patch("/api/project/{projectId}/member/{memberId}", 1L, 5L)
+            mockMvc.perform(patch("/api/projects/{projectId}/member/{memberId}", 1L, 5L)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(projectMemberUpdateDto)))
                     .andExpect(status().isOk())
@@ -114,7 +114,7 @@ class ProjectMemberControllerTest {
             ProjectMemberUpdateDto projectMemberUpdateDto =
                     new ProjectMemberUpdateDto(null, LocalDate.now(), LocalDate.now().plusMonths(5));
 
-            mockMvc.perform(patch("/api/project/{projectId}/member/{memberId}", 1L, 5L)
+            mockMvc.perform(patch("/api/projects/{projectId}/member/{memberId}", 1L, 5L)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(projectMemberUpdateDto)))
                     .andExpect(status().isBadRequest())
@@ -131,7 +131,7 @@ class ProjectMemberControllerTest {
         void whenValidInput_thenProjectMemberIsUpdated() throws Exception {
             doNothing().when(projectMemberService).deleteProjectMember(anyLong(), anyLong(), anyLong());
 
-            mockMvc.perform(delete("/api/project/{projectId}/member/{memberId}", 1L, 5L))
+            mockMvc.perform(delete("/api/projects/{projectId}/member/{memberId}", 1L, 5L))
                     .andExpect(status().isOk())
                     .andDo(print());
         }
@@ -139,7 +139,7 @@ class ProjectMemberControllerTest {
         @Test
         @DisplayName("잘못된 path 입력 시 400 반환")
         void whenInValidPath_thenReturnBadRequest() throws Exception {
-            mockMvc.perform(delete("/api/project/{projectId}/member/{memberId}", "projectId", "memberId"))
+            mockMvc.perform(delete("/api/projects/{projectId}/member/{memberId}", "projectId", "memberId"))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }

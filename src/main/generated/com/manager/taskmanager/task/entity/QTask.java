@@ -35,13 +35,13 @@ public class QTask extends EntityPathBase<Task> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final com.manager.taskmanager.projectmember.entity.QProjectMember member;
-
     public final com.manager.taskmanager.project.entity.QProject project;
+
+    public final com.manager.taskmanager.projectmember.entity.QProjectMember projectMember;
 
     public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
 
-    public final StringPath subject = createString("subject");
+    public final StringPath taskName = createString("taskName");
 
     public final EnumPath<TaskStatus> taskStatus = createEnum("taskStatus", TaskStatus.class);
 
@@ -66,8 +66,8 @@ public class QTask extends EntityPathBase<Task> {
 
     public QTask(Class<? extends Task> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member = inits.isInitialized("member") ? new com.manager.taskmanager.projectmember.entity.QProjectMember(forProperty("member"), inits.get("member")) : null;
         this.project = inits.isInitialized("project") ? new com.manager.taskmanager.project.entity.QProject(forProperty("project")) : null;
+        this.projectMember = inits.isInitialized("projectMember") ? new com.manager.taskmanager.projectmember.entity.QProjectMember(forProperty("projectMember"), inits.get("projectMember")) : null;
     }
 
 }

@@ -50,7 +50,7 @@ public class DepartmentControllerTest {
 
         given(departmentService.getAllDepartment()).willReturn(allDepartment);
 
-        mockMvc.perform(get("/api/department")
+        mockMvc.perform(get("/api/departments")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -65,7 +65,7 @@ public class DepartmentControllerTest {
     void 부서_등록_테스트() throws Exception {
         DepartmentRegisterDto dto = new DepartmentRegisterDto("CC");
 
-        mockMvc.perform(post("/api/department")
+        mockMvc.perform(post("/api/departments")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(dto)))
                 .andDo(print())
@@ -77,7 +77,7 @@ public class DepartmentControllerTest {
     void 부서_등록_실패_테스트() throws Exception {
         DepartmentRegisterDto dto = new DepartmentRegisterDto();
 
-        mockMvc.perform(post("/api/department")
+        mockMvc.perform(post("/api/departments")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(dto)))
                 .andDo(print())
@@ -87,7 +87,7 @@ public class DepartmentControllerTest {
     @Test
     @DisplayName("부서 삭제 테스트")
     void 부서_삭제_테스트() throws Exception {
-        mockMvc.perform(delete("/api/department/{id}", 1L))
+        mockMvc.perform(delete("/api/departments/{id}", 1L))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

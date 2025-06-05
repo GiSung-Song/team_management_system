@@ -178,8 +178,8 @@ class ProjectMemberServiceTest {
                     .satisfies(ex -> {
                         CustomException exception = (CustomException) ex;
 
-                        assertThat(exception.getErrorCode().getHttpStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-                        assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.PROJECT_MEMBER_CANNOT_BE_DELETED);
+                        assertThat(exception.getErrorCode().getHttpStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+                        assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.PROJECT_MEMBER_NOT_FOUND);
                     });
         }
     }

@@ -10,8 +10,12 @@ import com.manager.taskmanager.member.entity.Role;
 import com.manager.taskmanager.project.ProjectRepository;
 import com.manager.taskmanager.project.entity.Project;
 import com.manager.taskmanager.project.entity.ProjectStatus;
+import com.manager.taskmanager.projectmember.ProjectMemberRepository;
 import com.manager.taskmanager.projectmember.entity.ProjectMember;
 import com.manager.taskmanager.projectmember.entity.ProjectRole;
+import com.manager.taskmanager.task.TaskRepository;
+import com.manager.taskmanager.task.entity.Task;
+import com.manager.taskmanager.task.entity.TaskStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,6 +36,12 @@ public class TestDataFactory {
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private ProjectMemberRepository projectMemberRepository;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     public Department createDepartment() {
         Department department = Department.builder()
@@ -70,7 +80,7 @@ public class TestDataFactory {
 
     public Project createProject(Member leader, Member member) {
         LocalDate now = LocalDate.now();
-        LocalDate start = now.plusDays(1);
+        LocalDate start = now.minusDays(5);
         LocalDate end = now.plusWeeks(15);
 
         Project project = Project.builder()
@@ -78,7 +88,7 @@ public class TestDataFactory {
                 .description("test-description")
                 .startDate(start)
                 .endDate(end)
-                .projectStatus(ProjectStatus.PENDING)
+                .projectStatus(ProjectStatus.PROGRESS)
                 .build();
 
         ProjectMember projectLeader = ProjectMember.createMember(
@@ -93,6 +103,28 @@ public class TestDataFactory {
         project.addProjectMember(projectMember);
 
         return projectRepository.save(project);
+    }
+
+    public Task createTask(Member member, Project project) {
+        ProjectMember projectMember = projectMemberRepository.findAll().stream()
+                .filter(m -> m.getMember().getId().equals(member.getId()))
+                .filter(m -> m.getProject().getId().equals(project.getId()))
+                .findFirst()
+                .orElseThrow();
+
+        Task task = Task.createTask(
+                projectMember, "task", "description",
+                LocalDate.now().minusDays(3), LocalDate.now().plusWeeks(5),
+                TaskStatus.PROGRESS
+        );
+
+        project.addTask(task);
+        projectRepository.save(project);
+
+        return project.getTasks().stream()
+                .filter(t -> t.getTaskName().equalsIgnoreCase("task"))
+                .findFirst()
+                .orElseThrow();
     }
 
     public void setAuthentication(Member member, Role role) {

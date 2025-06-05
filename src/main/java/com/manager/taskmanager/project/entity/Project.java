@@ -56,6 +56,11 @@ public class Project extends BaseTimeEntity {
         projectMembers.add(projectMember);
     }
 
+    public void addTask(Task task) {
+        task.setProject(this);
+        tasks.add(task);
+    }
+
     public void updateProject(String description, LocalDate startDate, LocalDate endDate, ProjectStatus projectStatus) {
         this.description = description;
         this.startDate = startDate;

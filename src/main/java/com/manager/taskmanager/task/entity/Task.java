@@ -5,7 +5,6 @@ import com.manager.taskmanager.project.entity.Project;
 import com.manager.taskmanager.projectmember.entity.ProjectMember;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,7 +15,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Table(name = "tasks")
-@SQLDelete(sql = "UPDATE tasks SET deleted_at = NOW() WHERE id = ?")
 public class Task extends BaseTimeEntity {
 
     @Id
@@ -28,14 +26,13 @@ public class Task extends BaseTimeEntity {
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private ProjectMember member;
+    @JoinColumn(name = "project_member_id", nullable = false)
+    private ProjectMember projectMember;
 
     @Column(nullable = false, length = 100)
-    private String subject;
+    private String taskName;
 
-    @Column(nullable = false)
-    @Lob
+    @Column(nullable = false, length = 1000)
     private String description;
 
     @Column(nullable = false)
@@ -49,4 +46,33 @@ public class Task extends BaseTimeEntity {
     private TaskStatus taskStatus;
 
     private LocalDateTime deletedAt;
+
+    public static Task createTask(ProjectMember projectMember, String taskName, String description,
+                                  LocalDate startDate, LocalDate endDate, TaskStatus taskStatus) {
+        return Task.builder()
+                .projectMember(projectMember)
+                .taskName(taskName)
+                .description(description)
+                .startDate(startDate)
+                .endDate(endDate)
+                .taskStatus(taskStatus)
+                .build();
+    }
+
+    public void updateTask(String description, LocalDate startDate,
+                           LocalDate endDate, TaskStatus taskStatus) {
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.taskStatus = taskStatus;
+    }
+
+    public void deleteTask() {
+        this.deletedAt = LocalDateTime.now();
+        this.taskStatus = TaskStatus.CANCELED;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 }

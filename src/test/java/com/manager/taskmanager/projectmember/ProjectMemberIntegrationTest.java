@@ -87,7 +87,7 @@ public class ProjectMemberIntegrationTest {
                     )
             );
 
-            mockMvc.perform(post("/api/project/{projectId}/member", project.getId())
+            mockMvc.perform(post("/api/projects/{projectId}/member", project.getId())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isCreated())
@@ -115,7 +115,7 @@ public class ProjectMemberIntegrationTest {
                     )
             );
 
-            mockMvc.perform(post("/api/project/{projectId}/member", project.getId())
+            mockMvc.perform(post("/api/projects/{projectId}/member", project.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isBadRequest())
@@ -134,7 +134,7 @@ public class ProjectMemberIntegrationTest {
                     )
             );
 
-            mockMvc.perform(post("/api/project/{projectId}/member", project.getId())
+            mockMvc.perform(post("/api/projects/{projectId}/member", project.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isUnauthorized())
@@ -155,7 +155,7 @@ public class ProjectMemberIntegrationTest {
                     )
             );
 
-            mockMvc.perform(post("/api/project/{projectId}/member", project.getId())
+            mockMvc.perform(post("/api/projects/{projectId}/member", project.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isForbidden())
@@ -176,7 +176,7 @@ public class ProjectMemberIntegrationTest {
                     )
             );
 
-            mockMvc.perform(post("/api/project/{projectId}/member", project.getId())
+            mockMvc.perform(post("/api/projects/{projectId}/member", project.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isNotFound())
@@ -197,7 +197,7 @@ public class ProjectMemberIntegrationTest {
                     ProjectRole.MANAGER.name(), LocalDate.now().plusDays(10), LocalDate.now().plusWeeks(5)
             );
 
-            mockMvc.perform(patch("/api/project/{projectId}/member/{memberId}", project.getId(), member.getId())
+            mockMvc.perform(patch("/api/projects/{projectId}/member/{memberId}", project.getId(), member.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isOk())
@@ -220,7 +220,7 @@ public class ProjectMemberIntegrationTest {
                     ProjectRole.MEMBER.name(), LocalDate.now().plusDays(10), null
             );
 
-            mockMvc.perform(patch("/api/project/{projectId}/member/{memberId}", project.getId(), member.getId())
+            mockMvc.perform(patch("/api/projects/{projectId}/member/{memberId}", project.getId(), member.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isBadRequest())
@@ -234,7 +234,7 @@ public class ProjectMemberIntegrationTest {
                     ProjectRole.MEMBER.name(), LocalDate.now().plusDays(10), LocalDate.now().plusWeeks(5)
             );
 
-            mockMvc.perform(patch("/api/project/{projectId}/member/{memberId}", project.getId(), member.getId())
+            mockMvc.perform(patch("/api/projects/{projectId}/member/{memberId}", project.getId(), member.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isUnauthorized())
@@ -250,7 +250,7 @@ public class ProjectMemberIntegrationTest {
                     ProjectRole.MEMBER.name(), LocalDate.now().plusDays(10), LocalDate.now().plusWeeks(5)
             );
 
-            mockMvc.perform(patch("/api/project/{projectId}/member/{memberId}", project.getId(), member.getId())
+            mockMvc.perform(patch("/api/projects/{projectId}/member/{memberId}", project.getId(), member.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isForbidden())
@@ -266,7 +266,7 @@ public class ProjectMemberIntegrationTest {
                     ProjectRole.MEMBER.name(), LocalDate.now().plusDays(10), LocalDate.now().plusWeeks(5)
             );
 
-            mockMvc.perform(patch("/api/project/{projectId}/member/{memberId}", project.getId(), 432143214L)
+            mockMvc.perform(patch("/api/projects/{projectId}/member/{memberId}", project.getId(), 432143214L)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isNotFound())
@@ -283,7 +283,7 @@ public class ProjectMemberIntegrationTest {
         void whenValidInput_thenProjectMemberIsDeleted() throws Exception {
             testDataFactory.setAuthentication(leader, Role.MEMBER);
 
-            mockMvc.perform(delete("/api/project/{projectId}/member/{memberId}", project.getId(), member.getId()))
+            mockMvc.perform(delete("/api/projects/{projectId}/member/{memberId}", project.getId(), member.getId()))
                     .andExpect(status().isOk())
                     .andDo(print());
 
@@ -298,7 +298,7 @@ public class ProjectMemberIntegrationTest {
         void whenInValidPath_thenReturnBadRequest() throws Exception {
             testDataFactory.setAuthentication(leader, Role.MEMBER);
 
-            mockMvc.perform(delete("/api/project/{projectId}/member/{memberId}", project.getId(), "memberId"))
+            mockMvc.perform(delete("/api/projects/{projectId}/member/{memberId}", project.getId(), "memberId"))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }
@@ -306,7 +306,7 @@ public class ProjectMemberIntegrationTest {
         @Test
         @DisplayName("비 로그인 시 401 반환")
         void whenUnAuthenticated_thenReturnUnauthorized() throws Exception {
-            mockMvc.perform(delete("/api/project/{projectId}/member/{memberId}", project.getId(), member.getId()))
+            mockMvc.perform(delete("/api/projects/{projectId}/member/{memberId}", project.getId(), member.getId()))
                     .andExpect(status().isUnauthorized())
                     .andDo(print());
         }
@@ -316,8 +316,18 @@ public class ProjectMemberIntegrationTest {
         void whenLowProjectRole_thenReturnForbidden() throws Exception {
             testDataFactory.setAuthentication(member, Role.MEMBER);
 
-            mockMvc.perform(delete("/api/project/{projectId}/member/{memberId}", project.getId(), member.getId()))
+            mockMvc.perform(delete("/api/projects/{projectId}/member/{memberId}", project.getId(), member.getId()))
                     .andExpect(status().isForbidden())
+                    .andDo(print());
+        }
+
+        @Test
+        @DisplayName("회원이 없을 시 404 반환")
+        void whenNotFoundMember_thenReturnNotFound() throws Exception {
+            testDataFactory.setAuthentication(leader, Role.MEMBER);
+
+            mockMvc.perform(delete("/api/projects/{projectId}/member/{memberId}", project.getId(), 432143214L))
+                    .andExpect(status().isNotFound())
                     .andDo(print());
         }
     }

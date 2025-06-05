@@ -8,10 +8,7 @@ import com.manager.taskmanager.department.entity.Department;
 import com.manager.taskmanager.member.MemberRepository;
 import com.manager.taskmanager.member.entity.Member;
 import com.manager.taskmanager.member.entity.Position;
-import com.manager.taskmanager.project.dto.ProjectDetailDto;
-import com.manager.taskmanager.project.dto.ProjectListDto;
-import com.manager.taskmanager.project.dto.ProjectRegisterDto;
-import com.manager.taskmanager.project.dto.ProjectUpdateDto;
+import com.manager.taskmanager.project.dto.*;
 import com.manager.taskmanager.project.entity.Project;
 import com.manager.taskmanager.project.entity.ProjectStatus;
 import com.manager.taskmanager.projectmember.entity.ProjectMember;
@@ -203,7 +200,9 @@ class ProjectServiceTest {
         @Test
         @DisplayName("프로젝트 목록 정상 조회 - 프로젝트 명")
         void whenInputProjectName_thenReturnProjectList() {
-            ProjectListDto projectList = projectService.getProjectList("proje", null, null);
+            ProjectSearchCondition condition = new ProjectSearchCondition("proje", null, null);
+
+            ProjectListDto projectList = projectService.getProjectList(condition);
 
             assertThat(projectList.getProjectList())
                     .hasSize(1)
@@ -214,7 +213,8 @@ class ProjectServiceTest {
         @Test
         @DisplayName("프로젝트 목록 정상 조회 - 프로젝트에 속한 멤버 이름")
         void whenInputProjectMemberName_thenReturnProjectList() {
-            ProjectListDto projectList = projectService.getProjectList(null, "leader", null);
+            ProjectSearchCondition condition = new ProjectSearchCondition(null, "leader", null);
+            ProjectListDto projectList = projectService.getProjectList(condition);
 
             assertThat(projectList.getProjectList())
                     .hasSize(1)
@@ -225,7 +225,8 @@ class ProjectServiceTest {
         @Test
         @DisplayName("프로젝트 목록 정상 조회 - 멤버 이름, 프로젝트 상태")
         void whenInputProjectMemberNameAndProjectStatus_thenReturnProjectList() {
-            ProjectListDto projectList = projectService.getProjectList(null, "leader", "PENDING");
+            ProjectSearchCondition condition = new ProjectSearchCondition(null, "leader", "PENDING");
+            ProjectListDto projectList = projectService.getProjectList(condition);
 
             assertThat(projectList.getProjectList()).isEmpty();
         }
@@ -272,8 +273,6 @@ class ProjectServiceTest {
         @DisplayName("프로젝트 정상 삭제(soft delete)")
         void whenValidInput_thenProjectIsCanceled() {
             projectService.deleteProject(leader.getId(), project.getId());
-
-            projectRepository.flush();
 
             Project findProject = findByProjectName("project");
 

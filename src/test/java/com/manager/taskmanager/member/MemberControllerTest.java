@@ -54,7 +54,7 @@ class MemberControllerTest {
             List<MemberListDto> memberListDtoList = List.of(tester1, tester2);
 
             given(memberService.getMemberList("hr", "", false)).willReturn(memberListDtoList);
-            mockMvc.perform(get("/api/member")
+            mockMvc.perform(get("/api/members")
                             .param("departmentName", "hr"))
                     .andExpect(status().isOk())
                     .andDo(print())
@@ -77,7 +77,7 @@ class MemberControllerTest {
 
             willDoNothing().given(memberService).registerMember(dto);
 
-            mockMvc.perform(post("/api/member")
+            mockMvc.perform(post("/api/members")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isCreated())
@@ -91,7 +91,7 @@ class MemberControllerTest {
                     "emp-0001", null, "tester1", "email@email.com",
                     "01012344321", "STAFF", 1L);
 
-                    mockMvc.perform(post("/api/member")
+                    mockMvc.perform(post("/api/members")
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .content(objectMapper.writeValueAsString(dto)))
                             .andExpect(status().isBadRequest())
@@ -113,7 +113,7 @@ class MemberControllerTest {
 
             willDoNothing().given(memberService).updateMember(0L, intern);
 
-            mockMvc.perform(patch("/api/member/{memberId}", 0L)
+            mockMvc.perform(patch("/api/members/{memberId}", 0L)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(intern)))
                     .andExpect(status().isOk())
@@ -128,7 +128,7 @@ class MemberControllerTest {
                     "INTERN", null
             );
 
-            mockMvc.perform(patch("/api/member/{memberId}", 0L)
+            mockMvc.perform(patch("/api/members/{memberId}", 0L)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(intern)))
                     .andExpect(status().isBadRequest())
@@ -147,7 +147,7 @@ class MemberControllerTest {
 
             willDoNothing().given(memberService).updatePassword(0L, dto);
 
-            mockMvc.perform(patch("/api/member/{memberId}/password", 0L)
+            mockMvc.perform(patch("/api/members/{memberId}/password", 0L)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isOk())
@@ -159,7 +159,7 @@ class MemberControllerTest {
         void whenInValidInput_thenReturnBadRequest() throws Exception {
             PasswordUpdateDto dto = new PasswordUpdateDto();
 
-            mockMvc.perform(patch("/api/member/{memberId}/password", 0L)
+            mockMvc.perform(patch("/api/members/{memberId}/password", 0L)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isBadRequest())
@@ -176,7 +176,7 @@ class MemberControllerTest {
         void whenValidInput_thenMemberPasswordIsReset() throws Exception {
             willDoNothing().given(memberService).resetPassword(0L);
 
-            mockMvc.perform(post("/api/member/{memberId}/password/reset", 0L))
+            mockMvc.perform(post("/api/members/{memberId}/password/reset", 0L))
                     .andExpect(status().isOk())
                     .andDo(print());
         }
@@ -184,7 +184,7 @@ class MemberControllerTest {
         @Test
         @DisplayName("변환 불가능한 path 요청 시 400 반환")
         void whenInValidPath_thenReturnBadRequest() throws Exception {
-            mockMvc.perform(post("/api/member/{memberId}/password/reset", "test"))
+            mockMvc.perform(post("/api/members/{memberId}/password/reset", "test"))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }
@@ -199,7 +199,7 @@ class MemberControllerTest {
         void whenValidInput_thenMemberIsDeleted() throws Exception {
             willDoNothing().given(memberService).deleteMember(0L);
 
-            mockMvc.perform(delete("/api/member/{memberId}", 0L))
+            mockMvc.perform(delete("/api/members/{memberId}", 0L))
                     .andExpect(status().isOk())
                     .andDo(print());
         }
@@ -207,7 +207,7 @@ class MemberControllerTest {
         @Test
         @DisplayName("변환 불가능한 path 요청 시 400 반환")
         void whenInValidPath_thenReturnBadRequest() throws Exception {
-            mockMvc.perform(delete("/api/member/{memberId}", "test"))
+            mockMvc.perform(delete("/api/members/{memberId}", "test"))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }
@@ -227,7 +227,7 @@ class MemberControllerTest {
 
             given(memberService.getMemberById(2L)).willReturn(memberResponseDto);
 
-            mockMvc.perform(get("/api/member/{memberId}", 2L))
+            mockMvc.perform(get("/api/members/{memberId}", 2L))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andExpect(jsonPath("$.data.employeeNumber").value(memberResponseDto.getEmployeeNumber()))
@@ -238,7 +238,7 @@ class MemberControllerTest {
         @Test
         @DisplayName("변환 불가능한 path 요청 시 400 반환")
         void whenInValidPath_thenReturnBadRequest() throws Exception {
-            mockMvc.perform(get("/api/member/{memberId}", "test"))
+            mockMvc.perform(get("/api/members/{memberId}", "test"))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }

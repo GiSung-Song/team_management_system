@@ -13,11 +13,13 @@ public enum ErrorCode {
     DEPARTMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "DEPARTMENT_NOT_FOUND", "부서를 찾을 수 없습니다."),
     PROJECT_NOT_FOUND(HttpStatus.NOT_FOUND, "PROJECT_NOT_FOUND", "프로젝트를 찾을 수 없습니다."),
     PROJECT_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "PROJECT_MEMBER_NOT_FOUND", "프로젝트에 속한 회원을 찾을 수 없습니다."),
+    TASK_NOT_FOUND(HttpStatus.NOT_FOUND, "TASK_NOT_FOUND", "업무를 찾을 수 없습니다."),
 
     // INVALID
     MISSING_REQUIRED_FIELD(HttpStatus.BAD_REQUEST, "MISSING_REQUIRED_FIELD", "필수 입력 값이 누락되었습니다."),
     INVALID_PROJECT_STATUS(HttpStatus.BAD_REQUEST, "INVALID_PROJECT_STATUS", "프로젝트 상태 값이 유효하지 않습니다."),
     INVALID_PROJECT_DATE(HttpStatus.BAD_REQUEST, "INVALID_PROJECT_DATE", "프로젝트 시작날짜와 종료날짜를 확인해주세요."),
+    INVALID_TASK_STATUS(HttpStatus.BAD_REQUEST, "INVALID_TASK_STATUS", "업무 상태 값이 유효하지 않습니다."),
 
     // DUPLICATE
     DEPARTMENT_DUPLICATE(HttpStatus.CONFLICT, "DEPARTMENT_DUPLICATE", "이미 등록된 부서입니다."),

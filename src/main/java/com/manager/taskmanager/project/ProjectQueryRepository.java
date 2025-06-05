@@ -3,6 +3,7 @@ package com.manager.taskmanager.project;
 import com.manager.taskmanager.department.entity.QDepartment;
 import com.manager.taskmanager.member.entity.QMember;
 import com.manager.taskmanager.project.dto.ProjectDetailDto;
+import com.manager.taskmanager.project.dto.ProjectSearchCondition;
 import com.manager.taskmanager.project.entity.Project;
 import com.manager.taskmanager.project.entity.ProjectStatus;
 import com.manager.taskmanager.project.entity.QProject;
@@ -24,21 +25,21 @@ public class ProjectQueryRepository {
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
-    public List<Project> getProjectList(String projectName, String memberName, ProjectStatus projectStatus) {
+    public List<Project> getProjectList(ProjectSearchCondition condition) {
         QProject project = QProject.project;
 
         BooleanBuilder builder = new BooleanBuilder();
 
-        if (StringUtils.hasText(projectName)) {
-            builder.and(project.projectName.containsIgnoreCase(projectName));
+        if (StringUtils.hasText(condition.getProjectName())) {
+            builder.and(project.projectName.containsIgnoreCase(condition.getProjectName()));
         }
 
-        if (StringUtils.hasText(memberName)) {
-            builder.and(project.projectMembers.any().member.name.containsIgnoreCase(memberName));
+        if (StringUtils.hasText(condition.getMemberName())) {
+            builder.and(project.projectMembers.any().member.name.containsIgnoreCase(condition.getMemberName()));
         }
 
-        if (projectStatus != null) {
-            builder.and(project.projectStatus.eq(projectStatus));
+        if (StringUtils.hasText(condition.getProjectStatus())) {
+            builder.and(project.projectStatus.eq(ProjectStatus.valueOf(condition.getProjectStatus())));
         }
 
         return jpaQueryFactory

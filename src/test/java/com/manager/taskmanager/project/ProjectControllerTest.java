@@ -2,10 +2,7 @@ package com.manager.taskmanager.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manager.taskmanager.config.security.JwtTokenFilter;
-import com.manager.taskmanager.project.dto.ProjectDetailDto;
-import com.manager.taskmanager.project.dto.ProjectListDto;
-import com.manager.taskmanager.project.dto.ProjectRegisterDto;
-import com.manager.taskmanager.project.dto.ProjectUpdateDto;
+import com.manager.taskmanager.project.dto.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -63,7 +60,7 @@ class ProjectControllerTest {
 
             willDoNothing().given(projectService).createProject(anyLong(), any(ProjectRegisterDto.class));
 
-            mockMvc.perform(post("/api/project")
+            mockMvc.perform(post("/api/projects")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(projectRegisterDto)))
                     .andExpect(status().isCreated())
@@ -80,7 +77,7 @@ class ProjectControllerTest {
 
             willDoNothing().given(projectService).createProject(anyLong(), any(ProjectRegisterDto.class));
 
-            mockMvc.perform(post("/api/project")
+            mockMvc.perform(post("/api/projects")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(projectRegisterDto)))
                     .andExpect(status().isBadRequest())
@@ -101,7 +98,7 @@ class ProjectControllerTest {
 
             willDoNothing().given(projectService).updateProject(anyLong(), anyLong(), any(ProjectUpdateDto.class));
 
-            mockMvc.perform(patch("/api/project/{projectId}", 1L)
+            mockMvc.perform(patch("/api/projects/{projectId}", 1L)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(projectUpdateDto)))
                     .andExpect(status().isOk())
@@ -117,7 +114,7 @@ class ProjectControllerTest {
 
             willDoNothing().given(projectService).updateProject(anyLong(), anyLong(), any(ProjectUpdateDto.class));
 
-            mockMvc.perform(patch("/api/project/{projectId}", 1L)
+            mockMvc.perform(patch("/api/projects/{projectId}", 1L)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(projectUpdateDto)))
                     .andExpect(status().isBadRequest())
@@ -141,9 +138,9 @@ class ProjectControllerTest {
                     )
             );
 
-            given(projectService.getProjectList(null, null, null)).willReturn(projectListDto);
+            given(projectService.getProjectList(any(ProjectSearchCondition.class))).willReturn(projectListDto);
 
-            mockMvc.perform(get("/api/project"))
+            mockMvc.perform(get("/api/projects"))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.data.projectList[*].projectName", containsInAnyOrder("프로젝트 이름1", "프로젝트 이름2")));
@@ -169,7 +166,7 @@ class ProjectControllerTest {
 
             given(projectService.getProjectDetail(anyLong())).willReturn(projectDetailDto);
 
-            mockMvc.perform(get("/api/project/{projectId}", 1L))
+            mockMvc.perform(get("/api/projects/{projectId}", 1L))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andExpect(jsonPath("$.data.projectName").value("프로젝트"));
@@ -178,7 +175,7 @@ class ProjectControllerTest {
         @Test
         @DisplayName("프로젝트 ID 값 오류 시 400 반환")
         void whenInvalidPath_thenReturnBadRequest() throws Exception {
-            mockMvc.perform(get("/api/project/{projectId}", "projectId"))
+            mockMvc.perform(get("/api/projects/{projectId}", "projectId"))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }
@@ -193,7 +190,7 @@ class ProjectControllerTest {
         void whenValidInput_thenReturnProjectDetail() throws Exception {
             willDoNothing().given(projectService).deleteProject(anyLong(), anyLong());
 
-            mockMvc.perform(delete("/api/project/{projectId}", 1L))
+            mockMvc.perform(delete("/api/projects/{projectId}", 1L))
                     .andExpect(status().isOk())
                     .andDo(print());
         }
@@ -201,7 +198,7 @@ class ProjectControllerTest {
         @Test
         @DisplayName("프로젝트 ID 값 오류 시 400 반환")
         void whenInvalidPath_thenReturnBadRequest() throws Exception {
-            mockMvc.perform(get("/api/project/{projectId}", "projectId"))
+            mockMvc.perform(get("/api/projects/{projectId}", "projectId"))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }

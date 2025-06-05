@@ -17,7 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/project")
+@RequestMapping("/api/projects")
 @RequiredArgsConstructor
 @Tag(name = "Project Member", description = "프로젝트 멤버 관련 API")
 public class ProjectMemberController {
@@ -85,7 +85,8 @@ public class ProjectMemberController {
             @ApiResponse(responseCode = "200", description = "프로젝트 멤버 삭제 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청"),
             @ApiResponse(responseCode = "401", description = "로그인하지 않은 사용자"),
-            @ApiResponse(responseCode = "403", description = "접근 권한 없음(직급이 낮은 경우)")
+            @ApiResponse(responseCode = "403", description = "접근 권한 없음(직급이 낮은 경우)"),
+            @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자")
     })
     @DeleteMapping("/{projectId}/member/{memberId}")
     public ResponseEntity<ApiResult<Void>> deleteProjectMember(

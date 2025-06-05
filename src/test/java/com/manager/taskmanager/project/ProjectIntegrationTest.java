@@ -81,7 +81,7 @@ public class ProjectIntegrationTest {
                     LocalDate.now().plusMonths(5), ProjectStatus.PENDING.name()
             );
 
-            mockMvc.perform(post("/api/project")
+            mockMvc.perform(post("/api/projects")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(projectRegisterDto)))
                     .andDo(print())
@@ -106,7 +106,7 @@ public class ProjectIntegrationTest {
                     LocalDate.now().plusMonths(5), ProjectStatus.PENDING.name()
             );
 
-            mockMvc.perform(post("/api/project")
+            mockMvc.perform(post("/api/projects")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(projectRegisterDto)))
                     .andDo(print())
@@ -121,7 +121,7 @@ public class ProjectIntegrationTest {
                     LocalDate.now().plusMonths(5), ProjectStatus.PENDING.name()
             );
 
-            mockMvc.perform(post("/api/project")
+            mockMvc.perform(post("/api/projects")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(projectRegisterDto)))
                     .andDo(print())
@@ -138,7 +138,7 @@ public class ProjectIntegrationTest {
                     LocalDate.now().plusMonths(5), ProjectStatus.PENDING.name()
             );
 
-            mockMvc.perform(post("/api/project")
+            mockMvc.perform(post("/api/projects")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(projectRegisterDto)))
                     .andDo(print())
@@ -159,7 +159,7 @@ public class ProjectIntegrationTest {
                     "update description", project.getStartDate(), project.getEndDate(), project.getProjectStatus().name()
             );
 
-            mockMvc.perform(patch("/api/project/{projectId}", project.getId())
+            mockMvc.perform(patch("/api/projects/{projectId}", project.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(updateDto)))
                     .andDo(print())
@@ -179,7 +179,7 @@ public class ProjectIntegrationTest {
                     null, project.getStartDate(), project.getEndDate(), project.getProjectStatus().name()
             );
 
-            mockMvc.perform(patch("/api/project/{projectId}", project.getId())
+            mockMvc.perform(patch("/api/projects/{projectId}", project.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(updateDto)))
                     .andDo(print())
@@ -193,7 +193,7 @@ public class ProjectIntegrationTest {
                     "update description", project.getStartDate(), project.getEndDate(), project.getProjectStatus().name()
             );
 
-            mockMvc.perform(patch("/api/project/{projectId}", project.getId())
+            mockMvc.perform(patch("/api/projects/{projectId}", project.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(updateDto)))
                     .andDo(print())
@@ -209,7 +209,7 @@ public class ProjectIntegrationTest {
                     "update description", project.getStartDate(), project.getEndDate(), project.getProjectStatus().name()
             );
 
-            mockMvc.perform(patch("/api/project/{projectId}", project.getId())
+            mockMvc.perform(patch("/api/projects/{projectId}", project.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(updateDto)))
                     .andDo(print())
@@ -225,7 +225,7 @@ public class ProjectIntegrationTest {
         @DisplayName("프로젝트 목록 조회 정상")
         @WithMockUser(roles = "MEMBER")
         void whenValidInput_thenReturnProjectList() throws Exception {
-            mockMvc.perform(get("/api/project")
+            mockMvc.perform(get("/api/projects")
                             .param("projectName", "test"))
                     .andDo(print())
                     .andExpect(status().isOk())
@@ -235,7 +235,7 @@ public class ProjectIntegrationTest {
         @Test
         @DisplayName("비로그인 시 401 반환")
         void whenUnauthenticated_thenReturnUnauthorized() throws Exception {
-            mockMvc.perform(get("/api/project")
+            mockMvc.perform(get("/api/projects")
                             .param("projectName", "test"))
                     .andDo(print())
                     .andExpect(status().isUnauthorized());
@@ -250,7 +250,7 @@ public class ProjectIntegrationTest {
         @DisplayName("프로젝트 상세 조회 정상")
         @WithMockUser(roles = "MEMBER")
         void whenValidInput_thenReturnProjectList() throws Exception {
-            mockMvc.perform(get("/api/project/{projectId}", project.getId()))
+            mockMvc.perform(get("/api/projects/{projectId}", project.getId()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.data.projectName").value("test-project"));
@@ -260,7 +260,7 @@ public class ProjectIntegrationTest {
         @DisplayName("잘못된 ID 입력 시 400 반환")
         @WithMockUser(roles = "MEMBER")
         void whenInvalidProjectID_thenReturnBadRequest() throws Exception {
-            mockMvc.perform(get("/api/project/{projectId}", "projectID"))
+            mockMvc.perform(get("/api/projects/{projectId}", "projectID"))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
         }
@@ -268,7 +268,7 @@ public class ProjectIntegrationTest {
         @Test
         @DisplayName("비로그인 시 401 반환")
         void whenUnauthenticated_thenReturnUnauthorized() throws Exception {
-            mockMvc.perform(get("/api/project/{projectId}", project.getId()))
+            mockMvc.perform(get("/api/projects/{projectId}", project.getId()))
                     .andDo(print())
                     .andExpect(status().isUnauthorized());
         }
@@ -277,7 +277,7 @@ public class ProjectIntegrationTest {
         @DisplayName("프로젝트 없을 시 404 반환")
         @WithMockUser(roles = "MEMBER")
         void whenProjectNotFound_thenReturnNotfound() throws Exception {
-            mockMvc.perform(get("/api/project/{projectId}", 43214321L))
+            mockMvc.perform(get("/api/projects/{projectId}", 43214321L))
                     .andDo(print())
                     .andExpect(status().isNotFound());
         }
@@ -292,7 +292,7 @@ public class ProjectIntegrationTest {
         void whenValidInput_thenReturnProjectList() throws Exception {
             testDataFactory.setAuthentication(leader, Role.MEMBER);
 
-            mockMvc.perform(delete("/api/project/{projectId}", project.getId()))
+            mockMvc.perform(delete("/api/projects/{projectId}", project.getId()))
                     .andDo(print())
                     .andExpect(status().isOk());
 
@@ -306,7 +306,7 @@ public class ProjectIntegrationTest {
         @DisplayName("잘못된 ID 입력 시 400 반환")
         @WithMockUser(roles = "MEMBER")
         void whenInvalidProjectID_thenReturnBadRequest() throws Exception {
-            mockMvc.perform(delete("/api/project/{projectId}", "projectID"))
+            mockMvc.perform(delete("/api/projects/{projectId}", "projectID"))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
         }
@@ -314,7 +314,7 @@ public class ProjectIntegrationTest {
         @Test
         @DisplayName("비로그인 시 401 반환")
         void whenUnauthenticated_thenReturnUnauthorized() throws Exception {
-            mockMvc.perform(delete("/api/project/{projectId}", project.getId()))
+            mockMvc.perform(delete("/api/projects/{projectId}", project.getId()))
                     .andDo(print())
                     .andExpect(status().isUnauthorized());
         }
@@ -324,7 +324,7 @@ public class ProjectIntegrationTest {
         void whenLowPosition_thenReturnForbidden() throws Exception {
             testDataFactory.setAuthentication(member, Role.MEMBER);
 
-            mockMvc.perform(delete("/api/project/{projectId}", project.getId()))
+            mockMvc.perform(delete("/api/projects/{projectId}", project.getId()))
                     .andDo(print())
                     .andExpect(status().isForbidden());
         }
@@ -334,7 +334,7 @@ public class ProjectIntegrationTest {
         void whenProjectNotFound_thenReturnForbidden() throws Exception {
             testDataFactory.setAuthentication(leader, Role.MEMBER);
 
-            mockMvc.perform(delete("/api/project/{projectId}", 43214321L))
+            mockMvc.perform(delete("/api/projects/{projectId}", 43214321L))
                     .andDo(print())
                     .andExpect(status().isForbidden());
         }

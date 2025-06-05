@@ -86,7 +86,7 @@ public class MemberIntegrationTest {
         void whenValidInput_thenReturnMemberListForMember() throws Exception {
             setAuthentication(100L, Role.MEMBER);
 
-            mockMvc.perform(get("/api/member"))
+            mockMvc.perform(get("/api/members"))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andExpect(jsonPath("$.data.size()").value(2))
@@ -98,7 +98,7 @@ public class MemberIntegrationTest {
         void whenValidInput_thenReturnMemberListForManager() throws Exception {
             setAuthentication(100L, Role.MANAGER);
 
-            mockMvc.perform(get("/api/member"))
+            mockMvc.perform(get("/api/members"))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andExpect(jsonPath("$.data.size()").value(4))
@@ -108,7 +108,7 @@ public class MemberIntegrationTest {
         @Test
         @DisplayName("인증 실패 시 401 반환")
         void whenUnauthenticated_thenReturnUnauthorized() throws Exception {
-            mockMvc.perform(get("/api/member"))
+            mockMvc.perform(get("/api/members"))
                     .andExpect(status().isUnauthorized())
                     .andDo(print());
         }
@@ -126,7 +126,7 @@ public class MemberIntegrationTest {
                     "01013572468", Position.DEPARTMENT_HEAD.name(), dvDepartment.getId()
             );
 
-            mockMvc.perform(post("/api/member")
+            mockMvc.perform(post("/api/members")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(new ObjectMapper().writeValueAsString(memberRegisterDto)))
                     .andExpect(status().isCreated())
@@ -145,7 +145,7 @@ public class MemberIntegrationTest {
                     "01013572468", Position.DEPARTMENT_HEAD.name(), null
             );
 
-            mockMvc.perform(post("/api/member")
+            mockMvc.perform(post("/api/members")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(memberRegisterDto)))
                     .andExpect(status().isBadRequest())
@@ -160,7 +160,7 @@ public class MemberIntegrationTest {
                     "01013572468", Position.DEPARTMENT_HEAD.name(), 123123L
             );
 
-            mockMvc.perform(post("/api/member")
+            mockMvc.perform(post("/api/members")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(memberRegisterDto)))
                     .andExpect(status().isNotFound())
@@ -175,7 +175,7 @@ public class MemberIntegrationTest {
                     "01013572468", Position.DEPARTMENT_HEAD.name(), dvDepartment.getId()
             );
 
-            mockMvc.perform(post("/api/member")
+            mockMvc.perform(post("/api/members")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(memberRegisterDto)))
                     .andExpect(status().isConflict())
@@ -195,7 +195,7 @@ public class MemberIntegrationTest {
                     "test12345@email.com", "01123234545", Position.STAFF.name(), hrDepartment.getId()
             );
 
-            mockMvc.perform(patch("/api/member/{memberId}", hrMember.getId())
+            mockMvc.perform(patch("/api/members/{memberId}", hrMember.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(dto)))
                     .andExpect(status().isOk())
@@ -231,7 +231,7 @@ public class MemberIntegrationTest {
                     "test12345@email.com", "01123234545", Position.STAFF.name(), hrDepartment.getId()
             );
 
-            mockMvc.perform(patch("/api/member/{memberId}", member.getId())
+            mockMvc.perform(patch("/api/members/{memberId}", member.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(dto)))
                     .andExpect(status().isOk())
@@ -254,7 +254,7 @@ public class MemberIntegrationTest {
                     "test12345@email.com", "01123234545", Position.STAFF.name(), null
             );
 
-            mockMvc.perform(patch("/api/member/{memberId}", hrMember.getId())
+            mockMvc.perform(patch("/api/members/{memberId}", hrMember.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(dto)))
                     .andExpect(status().isBadRequest())
@@ -268,7 +268,7 @@ public class MemberIntegrationTest {
                     "test12345@email.com", "01123234545", Position.STAFF.name(), hrDepartment.getId()
             );
 
-            mockMvc.perform(patch("/api/member/{memberId}", hrMember.getId())
+            mockMvc.perform(patch("/api/members/{memberId}", hrMember.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(dto)))
                     .andExpect(status().isUnauthorized())
@@ -284,7 +284,7 @@ public class MemberIntegrationTest {
                     "test12345@email.com", "01123234545", Position.STAFF.name(), hrDepartment.getId()
             );
 
-            mockMvc.perform(patch("/api/member/{memberId}", hrMember.getId())
+            mockMvc.perform(patch("/api/members/{memberId}", hrMember.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(dto)))
                     .andExpect(status().isForbidden())
@@ -300,7 +300,7 @@ public class MemberIntegrationTest {
                     "test12345@email.com", "01123234545", Position.STAFF.name(), 3421432L
             );
 
-            mockMvc.perform(patch("/api/member/{memberId}", dvMember.getId())
+            mockMvc.perform(patch("/api/members/{memberId}", dvMember.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(dto)))
                     .andExpect(status().isNotFound())
@@ -316,7 +316,7 @@ public class MemberIntegrationTest {
                     hrMember.getEmail(), "01123234545", Position.STAFF.name(), dvDepartment.getId()
             );
 
-            mockMvc.perform(patch("/api/member/{memberId}", dvMember.getId())
+            mockMvc.perform(patch("/api/members/{memberId}", dvMember.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(dto)))
                     .andExpect(status().isConflict())
@@ -335,7 +335,7 @@ public class MemberIntegrationTest {
 
             PasswordUpdateDto newPassword = new PasswordUpdateDto("newPassword");
 
-            mockMvc.perform(patch("/api/member/{memberId}/password", dvMember.getId())
+            mockMvc.perform(patch("/api/members/{memberId}/password", dvMember.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(newPassword)))
                     .andExpect(status().isOk())
@@ -353,7 +353,7 @@ public class MemberIntegrationTest {
 
             PasswordUpdateDto newPassword = new PasswordUpdateDto();
 
-            mockMvc.perform(patch("/api/member/{memberId}/password", dvMember.getId())
+            mockMvc.perform(patch("/api/members/{memberId}/password", dvMember.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(newPassword)))
                     .andExpect(status().isBadRequest())
@@ -365,7 +365,7 @@ public class MemberIntegrationTest {
         void whenUnauthenticated_thenReturnUnauthorized() throws Exception {
             PasswordUpdateDto newPassword = new PasswordUpdateDto("newPassword");
 
-            mockMvc.perform(patch("/api/member/{memberId}/password", dvMember.getId())
+            mockMvc.perform(patch("/api/members/{memberId}/password", dvMember.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(newPassword)))
                     .andExpect(status().isUnauthorized())
@@ -379,7 +379,7 @@ public class MemberIntegrationTest {
 
             PasswordUpdateDto newPassword = new PasswordUpdateDto("newPassword");
 
-            mockMvc.perform(patch("/api/member/{memberId}/password", dvMember.getId())
+            mockMvc.perform(patch("/api/members/{memberId}/password", dvMember.getId())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(new ObjectMapper().writeValueAsString(newPassword)))
                     .andExpect(status().isForbidden())
@@ -395,7 +395,7 @@ public class MemberIntegrationTest {
         @DisplayName("회원 비밀번호 정상 초기화")
         @WithMockUser(roles = "MANAGER")
         void whenValidInput_thenPasswordIsReset() throws Exception {
-            mockMvc.perform(post("/api/member/{memberId}/password/reset", dvMember.getId()))
+            mockMvc.perform(post("/api/members/{memberId}/password/reset", dvMember.getId()))
                     .andExpect(status().isOk())
                     .andDo(print());
 
@@ -408,7 +408,7 @@ public class MemberIntegrationTest {
         @DisplayName("잘못된 요청 시 400 반환")
         @WithMockUser(roles = "MANAGER")
         void whenInValidInput_thenReturnBadRequest() throws Exception {
-            mockMvc.perform(post("/api/member/{memberId}/password/reset", "member"))
+            mockMvc.perform(post("/api/members/{memberId}/password/reset", "member"))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }
@@ -416,7 +416,7 @@ public class MemberIntegrationTest {
         @Test
         @DisplayName("비인증 시 401 반환")
         void whenUnauthenticated_thenReturnUnauthorized() throws Exception {
-            mockMvc.perform(post("/api/member/{memberId}/password/reset", dvMember.getId()))
+            mockMvc.perform(post("/api/members/{memberId}/password/reset", dvMember.getId()))
                     .andExpect(status().isUnauthorized())
                     .andDo(print());
         }
@@ -425,7 +425,7 @@ public class MemberIntegrationTest {
         @DisplayName("권한 없을 시 403 반환")
         @WithMockUser(roles = "MEMBER")
         void whenUnauthorized_thenReturnForbidden() throws Exception {
-            mockMvc.perform(post("/api/member/{memberId}/password/reset", dvMember.getId()))
+            mockMvc.perform(post("/api/members/{memberId}/password/reset", dvMember.getId()))
                     .andExpect(status().isForbidden())
                     .andDo(print());
         }
@@ -434,7 +434,7 @@ public class MemberIntegrationTest {
         @DisplayName("회원 번호 없을 시 404 반환")
         @WithMockUser(roles = "MANAGER")
         void whenInvalidMemberId_thenReturnNotFound() throws Exception {
-            mockMvc.perform(post("/api/member/{memberId}/password/reset", 5432543L))
+            mockMvc.perform(post("/api/members/{memberId}/password/reset", 5432543L))
                     .andExpect(status().isNotFound())
                     .andDo(print());
         }
@@ -448,7 +448,7 @@ public class MemberIntegrationTest {
         @DisplayName("회원 정상 삭제")
         @WithMockUser(roles = "MANAGER")
         void whenValidInput_thenMemberIsDeleted() throws Exception {
-            mockMvc.perform(delete("/api/member/{memberId}", dvMember.getId()))
+            mockMvc.perform(delete("/api/members/{memberId}", dvMember.getId()))
                     .andExpect(status().isOk())
                     .andDo(print());
 
@@ -463,7 +463,7 @@ public class MemberIntegrationTest {
         @DisplayName("잘못된 요청 시 400 반환")
         @WithMockUser(roles = "MANAGER")
         void whenInValidInput_thenReturnBadRequest() throws Exception {
-            mockMvc.perform(delete("/api/member/{memberId}", "member"))
+            mockMvc.perform(delete("/api/members/{memberId}", "member"))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }
@@ -471,7 +471,7 @@ public class MemberIntegrationTest {
         @Test
         @DisplayName("비인증 시 401 반환")
         void whenUnauthenticated_thenReturnUnauthorized() throws Exception {
-            mockMvc.perform(delete("/api/member/{memberId}", dvMember.getId()))
+            mockMvc.perform(delete("/api/members/{memberId}", dvMember.getId()))
                     .andExpect(status().isUnauthorized())
                     .andDo(print());
         }
@@ -480,7 +480,7 @@ public class MemberIntegrationTest {
         @DisplayName("권한 없을 시 403 반환")
         @WithMockUser(roles = "MEMBER")
         void whenUnauthorized_thenReturnForbidden() throws Exception {
-            mockMvc.perform(delete("/api/member/{memberId}", dvMember.getId()))
+            mockMvc.perform(delete("/api/members/{memberId}", dvMember.getId()))
                     .andExpect(status().isForbidden())
                     .andDo(print());
         }
@@ -489,7 +489,7 @@ public class MemberIntegrationTest {
         @DisplayName("회원 번호 없을 시 404 반환")
         @WithMockUser(roles = "MANAGER")
         void whenInvalidMemberId_thenReturnNotFound() throws Exception {
-            mockMvc.perform(delete("/api/member/{memberId}", 5432543L))
+            mockMvc.perform(delete("/api/members/{memberId}", 5432543L))
                     .andExpect(status().isNotFound())
                     .andDo(print());
         }
@@ -504,7 +504,7 @@ public class MemberIntegrationTest {
         void whenValidInput_thenReturnMemberInfoForMember() throws Exception {
             setAuthentication(999L, Role.MEMBER);
 
-            mockMvc.perform(get("/api/member/{memberId}", hrMember.getId()))
+            mockMvc.perform(get("/api/members/{memberId}", hrMember.getId()))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andExpect(jsonPath("$.data.employeeNumber").value(hrMember.getEmployeeNumber()))
@@ -517,7 +517,7 @@ public class MemberIntegrationTest {
         void whenInputDeletedMember_thenReturnNotFoundForMember() throws Exception {
             setAuthentication(999L, Role.MEMBER);
 
-            mockMvc.perform(get("/api/member/{memberId}", hrDeletedMember.getId()))
+            mockMvc.perform(get("/api/members/{memberId}", hrDeletedMember.getId()))
                     .andExpect(status().isNotFound())
                     .andDo(print());
         }
@@ -528,7 +528,7 @@ public class MemberIntegrationTest {
         void whenValidInput_thenReturnMemberInfoForManager() throws Exception {
             setAuthentication(999L, Role.MANAGER);
 
-            mockMvc.perform(get("/api/member/{memberId}", hrMember.getId()))
+            mockMvc.perform(get("/api/members/{memberId}", hrMember.getId()))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andExpect(jsonPath("$.data.employeeNumber").value(hrMember.getEmployeeNumber()))
@@ -542,7 +542,7 @@ public class MemberIntegrationTest {
         void whenInputDeletedMember_thenReturnMemberInfoForManager() throws Exception {
             setAuthentication(999L, Role.MANAGER);
 
-            mockMvc.perform(get("/api/member/{memberId}", hrDeletedMember.getId()))
+            mockMvc.perform(get("/api/members/{memberId}", hrDeletedMember.getId()))
                     .andExpect(status().isOk())
                     .andDo(print())
                     .andExpect(jsonPath("$.data.employeeNumber").value(hrDeletedMember.getEmployeeNumber()))
@@ -556,7 +556,7 @@ public class MemberIntegrationTest {
         void whenInValidInput_thenReturnBadRequest() throws Exception {
             setAuthentication(999L, Role.MANAGER);
 
-            mockMvc.perform(get("/api/member/{memberId}", "member"))
+            mockMvc.perform(get("/api/members/{memberId}", "member"))
                     .andExpect(status().isBadRequest())
                     .andDo(print());
         }
@@ -564,7 +564,7 @@ public class MemberIntegrationTest {
         @Test
         @DisplayName("비 로그인 시 401 반환")
         void whenUnauthenticated_thenReturnUnauthorized() throws Exception {
-            mockMvc.perform(get("/api/member/{memberId}", "member"))
+            mockMvc.perform(get("/api/members/{memberId}", "member"))
                     .andExpect(status().isUnauthorized())
                     .andDo(print());
         }
@@ -574,7 +574,7 @@ public class MemberIntegrationTest {
         void whenInvalidMemberId_thenReturnNotFound() throws Exception {
             setAuthentication(999L, Role.MEMBER);
 
-            mockMvc.perform(get("/api/member/{memberId}", 5432543L))
+            mockMvc.perform(get("/api/members/{memberId}", 5432543L))
                     .andExpect(status().isNotFound())
                     .andDo(print());
         }

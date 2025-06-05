@@ -26,13 +26,13 @@ import static com.manager.taskmanager.projectmember.dto.ProjectMemberRegisterDto
 @RequiredArgsConstructor
 public class ProjectMemberService {
 
-    private final ProjectMemberQueryRepository projectMemberQueryRepository;
     private final MemberService memberService;
+    private final ProjectMemberUtilService pmUtilService;
 
     // 프로젝트 멤버 추가
     @Transactional
     public void addProjectMember(Long memberId, Long projectId, ProjectMemberRegisterDto dto) {
-        ProjectMember projectMember = getProjectMemberAndCheckLeader(memberId, projectId);
+        ProjectMember projectMember = pmUtilService.getProjectMemberAndCheckLeader(memberId, projectId);
         Project project = projectMember.getProject();
 
         List<Long> memberIds = dto.getProjectMemberDtoList().stream()
@@ -66,7 +66,7 @@ public class ProjectMemberService {
             LocalDate startDate = projectMemberDto.getStartDate();
             LocalDate endDate = projectMemberDto.getEndDate();
 
-            checkProjectDate(startDate, endDate, project.getStartDate(), project.getEndDate());
+            pmUtilService.checkProjectDate(startDate, endDate, project.getStartDate(), project.getEndDate());
 
             ProjectMember pm = ProjectMember.createMember(
                     member,
@@ -82,13 +82,9 @@ public class ProjectMemberService {
     // 프로젝트 멤버 삭제(soft delete)
     @Transactional
     public void deleteProjectMember(Long loginId, Long projectId, Long memberId) {
-        getProjectMemberAndCheckLeader(loginId, projectId);
+        pmUtilService.getProjectMemberAndCheckLeader(loginId, projectId);
 
-        ProjectMember projectMember = projectMemberQueryRepository.getProjectMember(memberId, projectId);
-
-        if (projectMember == null) {
-            throw new CustomException(ErrorCode.PROJECT_MEMBER_CANNOT_BE_DELETED);
-        }
+        ProjectMember projectMember = pmUtilService.getProjectMember(memberId, projectId);
 
         projectMember.deleteProjectMember();
     }
@@ -96,38 +92,16 @@ public class ProjectMemberService {
     // 프로젝트 멤버 정보 변경
     @Transactional
     public void updateProjectMember(Long loginId, Long projectId, Long memberId, ProjectMemberUpdateDto dto) {
-        getProjectMemberAndCheckLeader(loginId, projectId);
+        pmUtilService.getProjectMemberAndCheckLeader(loginId, projectId);
 
-        ProjectMember projectMember = projectMemberQueryRepository.getProjectMember(memberId, projectId);
-
-        if (projectMember == null) {
-            throw new CustomException(ErrorCode.PROJECT_MEMBER_NOT_FOUND);
-        }
+        ProjectMember projectMember = pmUtilService.getProjectMember(memberId, projectId);
 
         Project project = projectMember.getProject();
 
-        checkProjectDate(dto.getStartDate(), dto.getEndDate(), project.getStartDate(), project.getEndDate());
+        pmUtilService.checkProjectDate(dto.getStartDate(), dto.getEndDate(), project.getStartDate(), project.getEndDate());
 
         projectMember.updateProjectMember(
                 dto.getStartDate(), dto.getEndDate(), ProjectRole.valueOf(dto.getProjectRole())
         );
-    }
-
-    // 프로젝트 권한 체크 및 조회
-    public ProjectMember getProjectMemberAndCheckLeader(Long memberId, Long projectId) {
-        ProjectMember projectMember = projectMemberQueryRepository.getProjectMember(memberId, projectId);
-
-        if (projectMember == null || projectMember.getProjectRole().getLevel() < 3) {
-            throw new CustomException(ErrorCode.NO_PERMISSION);
-        }
-
-        return projectMember;
-    }
-
-    // 프로젝트 허용일 체크
-    public void checkProjectDate(LocalDate startDate, LocalDate endDate, LocalDate projectStartDate, LocalDate projectEndDate) {
-        if (startDate.isBefore(projectStartDate) || endDate.isAfter(projectEndDate)) {
-            throw new CustomException(ErrorCode.INVALID_PROJECT_DATE);
-        }
     }
 }

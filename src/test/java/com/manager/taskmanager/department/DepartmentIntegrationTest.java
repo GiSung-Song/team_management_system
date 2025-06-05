@@ -67,7 +67,7 @@ public class DepartmentIntegrationTest {
     @DisplayName("부서 목록 조회 API")
     @WithMockUser(roles = "MEMBER")
     void whenRequestIsValid_thenReturnAllDepartmentList() throws Exception {
-        mockMvc.perform(get("/api/department")
+        mockMvc.perform(get("/api/departments")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -85,7 +85,7 @@ public class DepartmentIntegrationTest {
         void whenValidInput_thenCreateDepartmentIsCreated() throws Exception {
             DepartmentRegisterDto dto = new DepartmentRegisterDto("CA");
 
-            mockMvc.perform(post("/api/department")
+            mockMvc.perform(post("/api/departments")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isCreated())
@@ -98,7 +98,7 @@ public class DepartmentIntegrationTest {
         void whenRequiredFieldMissing_thenReturnBadRequest() throws Exception {
             DepartmentRegisterDto dto = new DepartmentRegisterDto();
 
-            mockMvc.perform(post("/api/department")
+            mockMvc.perform(post("/api/departments")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isBadRequest())
@@ -111,7 +111,7 @@ public class DepartmentIntegrationTest {
         void whenDepartmentNameIsDuplicated_thenReturnBadRequest() throws Exception {
             DepartmentRegisterDto dto = new DepartmentRegisterDto("HR");
 
-            mockMvc.perform(post("/api/department")
+            mockMvc.perform(post("/api/departments")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isConflict())
@@ -123,7 +123,7 @@ public class DepartmentIntegrationTest {
         void whenUnauthenticated_thenReturnUnauthorized() throws Exception {
             DepartmentRegisterDto dto = new DepartmentRegisterDto("QA");
 
-            mockMvc.perform(post("/api/department")
+            mockMvc.perform(post("/api/departments")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isUnauthorized())
@@ -136,7 +136,7 @@ public class DepartmentIntegrationTest {
         void whenUnauthorized_thenReturnForbidden() throws Exception {
             DepartmentRegisterDto dto = new DepartmentRegisterDto("QA");
 
-            mockMvc.perform(post("/api/department")
+            mockMvc.perform(post("/api/departments")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(dto)))
                     .andExpect(status().isForbidden())
@@ -152,7 +152,7 @@ public class DepartmentIntegrationTest {
         @DisplayName("정상 삭제 요청 시 200 반환")
         @WithMockUser(roles = "MANAGER")
         void whenValidInput_thenDepartmentDeleted() throws Exception {
-            mockMvc.perform(delete("/api/department/{departmentId}", hr.getId()))
+            mockMvc.perform(delete("/api/departments/{departmentId}", hr.getId()))
                     .andDo(print())
                     .andExpect(status().isOk());
 
@@ -166,7 +166,7 @@ public class DepartmentIntegrationTest {
         @DisplayName("잘못된 요청 시 400 반환")
         @WithMockUser(roles = "MANAGER")
         void whenInvalid_thenReturnBadRequest() throws Exception {
-            mockMvc.perform(delete("/api/department/{departmentId}", "departmentId"))
+            mockMvc.perform(delete("/api/departments/{departmentId}", "departmentId"))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
         }
@@ -174,7 +174,7 @@ public class DepartmentIntegrationTest {
         @Test
         @DisplayName("인증 실패 시 401 반환")
         void whenUnauthenticated_thenReturnUnauthorized() throws Exception {
-            mockMvc.perform(delete("/api/department/{departmentId}", hr.getId()))
+            mockMvc.perform(delete("/api/departments/{departmentId}", hr.getId()))
                     .andExpect(status().isUnauthorized())
                     .andDo(print());
         }
@@ -183,7 +183,7 @@ public class DepartmentIntegrationTest {
         @DisplayName("권한 없을 시 403 반환")
         @WithMockUser(roles = "MEMBER")
         void whenUnauthorized_thenReturnForbidden() throws Exception {
-            mockMvc.perform(delete("/api/department/{departmentId}", hr.getId()))
+            mockMvc.perform(delete("/api/departments/{departmentId}", hr.getId()))
                     .andExpect(status().isForbidden())
                     .andDo(print());
         }

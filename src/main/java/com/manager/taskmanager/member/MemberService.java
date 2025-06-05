@@ -153,7 +153,6 @@ public class MemberService {
         return memberResponseDto;
     }
 
-    @Transactional(readOnly = true)
     public List<Member> getAllActiveMember(List<Long> memberIds) {
         if (memberIds == null || memberIds.isEmpty()) {
             return Collections.emptyList();
@@ -162,7 +161,6 @@ public class MemberService {
         return memberRepository.findAllByIdInAndDeletedAtIsNull(memberIds);
     }
 
-    @Transactional(readOnly = true)
     public Member getActiveMemberById(Long memberId) {
         return memberRepository.findByIdAndDeletedAtIsNull(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));

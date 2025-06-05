@@ -26,21 +26,15 @@ public class TestSecurityConfig {
     public SecurityFilterChain testSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests((request) -> request
-                        .requestMatchers(HttpMethod.POST, "/api/department").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/department/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/api/departments").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/departments/**").hasRole("MANAGER")
 
-                        .requestMatchers(HttpMethod.GET, "/api/department").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/member").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/departments").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/members").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/api/member").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/member/**").authenticated()
-                        .requestMatchers(HttpMethod.PATCH, "/api/member/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/reIssue").authenticated()
-                        .requestMatchers(HttpMethod.POST, "api/auth/logout").authenticated()
-
-                        .requestMatchers(HttpMethod.POST, "/api/member/*/password/reset").hasRole("MANAGER")
-                        .requestMatchers(HttpMethod.DELETE, "/api/member/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.POST, "/api/members/*/password/reset").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/members/**").hasRole("MANAGER")
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())

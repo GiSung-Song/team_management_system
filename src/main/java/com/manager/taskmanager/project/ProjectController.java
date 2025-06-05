@@ -2,10 +2,7 @@ package com.manager.taskmanager.project;
 
 import com.manager.taskmanager.common.ApiResult;
 import com.manager.taskmanager.config.security.CustomUserDetails;
-import com.manager.taskmanager.project.dto.ProjectDetailDto;
-import com.manager.taskmanager.project.dto.ProjectListDto;
-import com.manager.taskmanager.project.dto.ProjectRegisterDto;
-import com.manager.taskmanager.project.dto.ProjectUpdateDto;
+import com.manager.taskmanager.project.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,7 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/project")
+@RequestMapping("/api/projects")
 @RequiredArgsConstructor
 @Tag(name = "Project", description = "프로젝트 관련 API")
 public class ProjectController {
@@ -79,16 +76,9 @@ public class ProjectController {
     })
     @GetMapping
     public ResponseEntity<ApiResult<ProjectListDto>> getProjectList(
-            @Parameter(description = "프로젝트명 필터")
-            @RequestParam(required = false) String projectName,
-
-            @Parameter(description = "회원이 속한 프로젝트 필터")
-            @RequestParam(required = false) String memberName,
-
-            @Parameter(description = "프로젝트 진행 상태 필터")
-            @RequestParam(required = false) String projectStatus
-    ) {
-        ProjectListDto projectList = projectService.getProjectList(projectName, memberName, projectStatus);
+            @Parameter(description = "프로젝트명, 회원이름, 프로젝트 진행 상태 필터")
+            @ModelAttribute ProjectSearchCondition condition) {
+        ProjectListDto projectList = projectService.getProjectList(condition);
 
         return ResponseEntity.ok(
                 ApiResult.success(HttpStatus.OK, "프로젝트 목록을 조회했습니다.", projectList));
