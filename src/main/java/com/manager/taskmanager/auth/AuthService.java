@@ -2,10 +2,11 @@ package com.manager.taskmanager.auth;
 
 import com.manager.taskmanager.auth.dto.LoginRequestDto;
 import com.manager.taskmanager.auth.dto.TokenDto;
-import com.manager.taskmanager.common.CustomException;
-import com.manager.taskmanager.common.ErrorCode;
-import com.manager.taskmanager.config.security.JwtPayloadDto;
-import com.manager.taskmanager.config.security.JwtTokenUtil;
+import com.manager.taskmanager.global.error.CustomException;
+import com.manager.taskmanager.global.error.ErrorCode;
+import com.manager.taskmanager.global.config.security.JwtPayloadDto;
+import com.manager.taskmanager.global.config.security.JwtTokenUtil;
+import com.manager.taskmanager.global.log.annotation.SaveLogging;
 import com.manager.taskmanager.member.MemberRepository;
 import com.manager.taskmanager.member.entity.Member;
 import io.jsonwebtoken.JwtException;
@@ -27,6 +28,7 @@ public class AuthService {
     private final RedisTemplate<String, String> redisTemplate;
 
     // 로그인
+    @SaveLogging(eventName = "로그인")
     public TokenDto login(LoginRequestDto dto) {
         Member member = memberRepository.findByEmployeeNumberAndDeletedAtIsNull(dto.getEmployeeNumber())
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CREDENTIALS));

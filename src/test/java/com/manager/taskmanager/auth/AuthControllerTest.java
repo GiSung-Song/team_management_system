@@ -2,9 +2,9 @@ package com.manager.taskmanager.auth;
 
 import com.manager.taskmanager.auth.dto.LoginRequestDto;
 import com.manager.taskmanager.auth.dto.TokenDto;
-import com.manager.taskmanager.common.CustomException;
-import com.manager.taskmanager.common.ErrorCode;
-import com.manager.taskmanager.config.security.JwtTokenFilter;
+import com.manager.taskmanager.global.error.CustomException;
+import com.manager.taskmanager.global.error.ErrorCode;
+import com.manager.taskmanager.global.config.security.JwtTokenFilter;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

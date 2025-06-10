@@ -1,6 +1,6 @@
 package com.manager.taskmanager.department;
 
-import com.manager.taskmanager.common.CustomException;
+import com.manager.taskmanager.global.error.CustomException;
 import com.manager.taskmanager.config.DBContainerExtension;
 import com.manager.taskmanager.department.dto.AllDepartmentListDto;
 import com.manager.taskmanager.department.dto.DepartmentRegisterDto;

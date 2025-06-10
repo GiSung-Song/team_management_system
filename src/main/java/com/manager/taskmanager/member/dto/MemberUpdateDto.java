@@ -1,6 +1,6 @@
 package com.manager.taskmanager.member.dto;
 
-import com.manager.taskmanager.common.ValidEnum;
+import com.manager.taskmanager.global.validation.ValidEnum;
 import com.manager.taskmanager.member.entity.Position;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

@@ -1,6 +1,6 @@
 package com.manager.taskmanager.task.entity;
 
-import com.manager.taskmanager.common.BaseTimeEntity;
+import com.manager.taskmanager.global.entity.BaseTimeEntity;
 import com.manager.taskmanager.project.entity.Project;
 import com.manager.taskmanager.projectmember.entity.ProjectMember;
 import jakarta.persistence.*;
@@ -75,4 +75,5 @@ public class Task extends BaseTimeEntity {
     public void setProject(Project project) {
         this.project = project;
     }
+
 }

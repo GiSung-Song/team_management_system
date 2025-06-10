@@ -1,7 +1,7 @@
 package com.manager.taskmanager.task;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manager.taskmanager.config.security.JwtTokenFilter;
+import com.manager.taskmanager.global.config.security.JwtTokenFilter;
 import com.manager.taskmanager.task.dto.AddTaskDto;
 import com.manager.taskmanager.task.dto.UpdateTaskDto;
 import com.manager.taskmanager.task.entity.TaskStatus;

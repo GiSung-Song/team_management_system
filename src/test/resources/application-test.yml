@@ -1,21 +1,7 @@
 spring:
-  kafka:
-    bootstrap-servers: {spring.kafka.bootstrap-servers}
-    consumer:
-      group-id: test-group
-      auto-offset-reset: earliest
-      properties:
-        spring.json.trusted.packages: "*"
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    listener:
-      ack-mode: manual_immediate
-
   config:
     activate:
       on-profile: test
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
@@ -32,6 +18,10 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
 
+  batch:
+    jdbc:
+      initialize-schema: always
+
 jwt:
   secretKey: project-test-jwt-secret-key-abracadabra-asdfqwer
   access:
@@ -39,3 +29,4 @@ jwt:
 
   refresh:
     expiration: 3600000
+

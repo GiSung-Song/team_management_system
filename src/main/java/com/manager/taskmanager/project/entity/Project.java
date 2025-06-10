@@ -1,6 +1,6 @@
 package com.manager.taskmanager.project.entity;
 
-import com.manager.taskmanager.common.BaseTimeEntity;
+import com.manager.taskmanager.global.entity.BaseTimeEntity;
 import com.manager.taskmanager.projectmember.entity.ProjectMember;
 import com.manager.taskmanager.task.entity.Task;
 import jakarta.persistence.*;

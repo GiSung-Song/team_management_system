@@ -1,6 +1,5 @@
 package com.manager.taskmanager.task;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manager.taskmanager.config.DBContainerExtension;
 import com.manager.taskmanager.config.TestDataFactory;
@@ -12,7 +11,6 @@ import com.manager.taskmanager.task.dto.AddTaskDto;
 import com.manager.taskmanager.task.dto.UpdateTaskDto;
 import com.manager.taskmanager.task.entity.Task;
 import com.manager.taskmanager.task.entity.TaskStatus;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

@@ -1,7 +1,7 @@
 package com.manager.taskmanager.projectmember;
 
-import com.manager.taskmanager.common.ApiResult;
-import com.manager.taskmanager.config.security.CustomUserDetails;
+import com.manager.taskmanager.global.response.ApiResult;
+import com.manager.taskmanager.global.config.security.CustomUserDetails;
 import com.manager.taskmanager.projectmember.dto.ProjectMemberRegisterDto;
 import com.manager.taskmanager.projectmember.dto.ProjectMemberUpdateDto;
 import io.swagger.v3.oas.annotations.Operation;

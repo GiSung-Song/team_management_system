@@ -1,7 +1,7 @@
 package com.manager.taskmanager.project.entity;
 
-import com.manager.taskmanager.common.CustomException;
-import com.manager.taskmanager.common.ErrorCode;
+import com.manager.taskmanager.global.error.CustomException;
+import com.manager.taskmanager.global.error.ErrorCode;
 
 public enum ProjectStatus {
     PENDING, PROGRESS, COMPLETED, CANCELED;

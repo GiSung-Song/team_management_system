@@ -2,7 +2,7 @@ package com.manager.taskmanager.auth;
 
 import com.manager.taskmanager.auth.dto.LoginRequestDto;
 import com.manager.taskmanager.auth.dto.TokenDto;
-import com.manager.taskmanager.common.ApiResult;
+import com.manager.taskmanager.global.response.ApiResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

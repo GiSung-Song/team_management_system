@@ -1,7 +1,7 @@
 package com.manager.taskmanager.task.entity;
 
-import com.manager.taskmanager.common.CustomException;
-import com.manager.taskmanager.common.ErrorCode;
+import com.manager.taskmanager.global.error.CustomException;
+import com.manager.taskmanager.global.error.ErrorCode;
 
 public enum TaskStatus {
     PENDING, PROGRESS, COMPLETED, CANCELED;

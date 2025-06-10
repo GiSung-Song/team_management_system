@@ -1,7 +1,7 @@
 package com.manager.taskmanager.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manager.taskmanager.config.security.JwtTokenFilter;
+import com.manager.taskmanager.global.config.security.JwtTokenFilter;
 import com.manager.taskmanager.project.dto.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

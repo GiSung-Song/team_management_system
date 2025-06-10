@@ -1,6 +1,6 @@
 package com.manager.taskmanager.projectmember.dto;
 
-import com.manager.taskmanager.common.ValidEnum;
+import com.manager.taskmanager.global.validation.ValidEnum;
 import com.manager.taskmanager.projectmember.entity.ProjectRole;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -49,6 +49,5 @@ public class ProjectMemberRegisterDto {
         @Schema(description = "종료일", example = "2025-12-31")
         @NotNull(message = "종료일은 필수 입력 값 입니다.")
         private LocalDate endDate;
-
     }
 }

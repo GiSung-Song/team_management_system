@@ -2,8 +2,8 @@ package com.manager.taskmanager.auth;
 
 import com.manager.taskmanager.auth.dto.LoginRequestDto;
 import com.manager.taskmanager.config.DBContainerExtension;
-import com.manager.taskmanager.config.security.JwtPayloadDto;
-import com.manager.taskmanager.config.security.JwtTokenUtil;
+import com.manager.taskmanager.global.config.security.JwtPayloadDto;
+import com.manager.taskmanager.global.config.security.JwtTokenUtil;
 import com.manager.taskmanager.department.DepartmentRepository;
 import com.manager.taskmanager.department.entity.Department;
 import com.manager.taskmanager.member.MemberRepository;

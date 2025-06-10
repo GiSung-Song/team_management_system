@@ -1,7 +1,7 @@
 package com.manager.taskmanager.member;
 
-import com.manager.taskmanager.common.CustomException;
-import com.manager.taskmanager.common.ErrorCode;
+import com.manager.taskmanager.global.error.CustomException;
+import com.manager.taskmanager.global.error.ErrorCode;
 import com.manager.taskmanager.config.DBContainerExtension;
 import com.manager.taskmanager.department.DepartmentRepository;
 import com.manager.taskmanager.department.entity.Department;

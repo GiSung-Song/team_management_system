@@ -9,6 +9,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -45,6 +47,17 @@ public class TaskQueryRepository {
                 .selectFrom(task)
                 .where(booleanBuilder)
                 .orderBy(task.endDate.asc().nullsLast())
+                .fetch();
+    }
+
+    public List<Long> getDeletedTaskAfter3Month(LocalDateTime date) {
+        QTask task = QTask.task;
+
+        return jpaQueryFactory
+                .select(task.id)
+                .from(task)
+                .where(task.taskStatus.eq(TaskStatus.CANCELED)
+                        .and(task.deletedAt.loe(date)))
                 .fetch();
     }
 }

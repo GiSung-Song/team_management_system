@@ -1,6 +1,6 @@
 package com.manager.taskmanager.task.dto;
 
-import com.manager.taskmanager.common.ValidEnum;
+import com.manager.taskmanager.global.validation.ValidEnum;
 import com.manager.taskmanager.task.entity.TaskStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

@@ -1,14 +1,14 @@
 package com.manager.taskmanager.member;
 
-import com.manager.taskmanager.common.CustomException;
-import com.manager.taskmanager.common.ErrorCode;
+import com.manager.taskmanager.global.error.CustomException;
+import com.manager.taskmanager.global.error.ErrorCode;
 import com.manager.taskmanager.department.DepartmentRepository;
 import com.manager.taskmanager.department.entity.Department;
+import com.manager.taskmanager.global.log.annotation.SaveLogging;
 import com.manager.taskmanager.member.dto.*;
 import com.manager.taskmanager.member.entity.Member;
 import com.manager.taskmanager.member.entity.Position;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +41,7 @@ public class MemberService {
 
     // 회원 가입
     @Transactional
+    @SaveLogging(eventName = "회원가입")
     public void registerMember(MemberRegisterDto dto) {
         if (memberRepository.existsByEmployeeNumber(dto.getEmployeeNumber())) {
             throw new CustomException(ErrorCode.EMPLOYEE_NUMBER_DUPLICATE);
@@ -67,6 +68,7 @@ public class MemberService {
 
     // 회원 정보 수정
     @Transactional
+    @SaveLogging(eventName = "회원 정보 수정")
     public void updateMember(Long memberId, MemberUpdateDto dto) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -96,6 +98,7 @@ public class MemberService {
 
     // 회원 비밀번호 수정
     @Transactional
+    @SaveLogging(eventName = "회원 비밀번호 수정")
     public void updatePassword(Long memberId, PasswordUpdateDto dto) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -105,6 +108,7 @@ public class MemberService {
 
     // 회원 비밀번호 초기화(관리자용)
     @Transactional
+    @SaveLogging(eventName = "회원 비밀번호 초기화")
     public void resetPassword(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -124,6 +128,7 @@ public class MemberService {
 
     // 회원 삭제(실제 삭제X, soft delete)
     @Transactional
+    @SaveLogging(eventName = "회원 삭제")
     public void deleteMember(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));

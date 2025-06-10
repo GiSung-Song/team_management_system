@@ -1,7 +1,7 @@
 package com.manager.taskmanager.projectmember;
 
-import com.manager.taskmanager.common.CustomException;
-import com.manager.taskmanager.common.ErrorCode;
+import com.manager.taskmanager.global.error.CustomException;
+import com.manager.taskmanager.global.error.ErrorCode;
 import com.manager.taskmanager.projectmember.entity.ProjectMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

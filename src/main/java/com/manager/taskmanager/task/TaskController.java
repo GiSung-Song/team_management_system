@@ -1,7 +1,7 @@
 package com.manager.taskmanager.task;
 
-import com.manager.taskmanager.common.ApiResult;
-import com.manager.taskmanager.config.security.CustomUserDetails;
+import com.manager.taskmanager.global.response.ApiResult;
+import com.manager.taskmanager.global.config.security.CustomUserDetails;
 import com.manager.taskmanager.member.entity.Role;
 import com.manager.taskmanager.task.dto.*;
 import io.swagger.v3.oas.annotations.Operation;

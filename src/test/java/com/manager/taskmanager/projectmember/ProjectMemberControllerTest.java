@@ -1,7 +1,7 @@
 package com.manager.taskmanager.projectmember;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manager.taskmanager.config.security.JwtTokenFilter;
+import com.manager.taskmanager.global.config.security.JwtTokenFilter;
 import com.manager.taskmanager.projectmember.dto.ProjectMemberRegisterDto;
 import com.manager.taskmanager.projectmember.dto.ProjectMemberUpdateDto;
 import com.manager.taskmanager.projectmember.entity.ProjectRole;

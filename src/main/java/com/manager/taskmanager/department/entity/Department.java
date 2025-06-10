@@ -1,6 +1,6 @@
 package com.manager.taskmanager.department.entity;
 
-import com.manager.taskmanager.common.BaseTimeEntity;
+import com.manager.taskmanager.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,7 +1,7 @@
 package com.manager.taskmanager.department;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manager.taskmanager.config.security.JwtTokenFilter;
+import com.manager.taskmanager.global.config.security.JwtTokenFilter;
 import com.manager.taskmanager.department.dto.AllDepartmentListDto;
 import com.manager.taskmanager.department.dto.DepartmentDto;
 import com.manager.taskmanager.department.dto.DepartmentRegisterDto;

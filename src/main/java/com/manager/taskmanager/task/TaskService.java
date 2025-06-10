@@ -1,7 +1,8 @@
 package com.manager.taskmanager.task;
 
-import com.manager.taskmanager.common.CustomException;
-import com.manager.taskmanager.common.ErrorCode;
+import com.manager.taskmanager.global.error.CustomException;
+import com.manager.taskmanager.global.error.ErrorCode;
+import com.manager.taskmanager.global.log.annotation.SaveLogging;
 import com.manager.taskmanager.project.entity.Project;
 import com.manager.taskmanager.projectmember.ProjectMemberUtilService;
 import com.manager.taskmanager.projectmember.entity.ProjectMember;
@@ -26,6 +27,7 @@ public class TaskService {
 
     // 추가
     @Transactional
+    @SaveLogging(eventName = "업무 등록")
     public void addTask(Long memberId, Long projectId, AddTaskDto dto) {
         ProjectMember projectMember = pmUtilService.getProjectMember(memberId, projectId);
         Project project = projectMember.getProject();
@@ -49,6 +51,7 @@ public class TaskService {
 
     // 수정
     @Transactional
+    @SaveLogging(eventName = "업무 수정")
     public void updateTask(Long memberId, Long taskId, UpdateTaskDto dto) {
         Task task = getTaskAndCheckOwner(memberId, taskId);
 
@@ -58,6 +61,7 @@ public class TaskService {
 
     // 삭제
     @Transactional
+    @SaveLogging(eventName = "업무 삭제")
     public void deleteTask(Long memberId, Long taskId) {
         Task task = getTaskAndCheckOwner(memberId, taskId);
 

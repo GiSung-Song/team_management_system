@@ -1,0 +1,72 @@
+version: "3.5"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: team_project
+      MYSQL_USER: gisung
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.10.1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    environment:
+      discovery.type: single-node
+      xpack.monitoring.enabled: false
+      xpack.security.enabled: true
+      xpack.security.transport.ssl.enabled: true
+      ELASTIC_USERNAME: "elastic"
+      ELASTIC_PASSWORD: "elastic123!@#"
+
+  logstash:
+    container_name: logstash
+    image: docker.elastic.co/logstash/logstash:7.10.1
+    environment:
+      - XPACK_MONITORING_ENABLED=false
+    ports:
+      - "5001:5001"
+      - "9600:9600"
+    volumes:
+      - ./infra/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./infra/logstash/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml
+      - ./infra/logstash/pipeline/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logs:/usr/share/logstash/logs
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    container_name: kibana
+    image: kibana:7.10.1
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./infra/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+
+volumes:
+  es_data:
+  redis_data:
+  mysql_data:

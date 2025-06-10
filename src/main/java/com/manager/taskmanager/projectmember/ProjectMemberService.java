@@ -1,7 +1,8 @@
 package com.manager.taskmanager.projectmember;
 
-import com.manager.taskmanager.common.CustomException;
-import com.manager.taskmanager.common.ErrorCode;
+import com.manager.taskmanager.global.error.CustomException;
+import com.manager.taskmanager.global.error.ErrorCode;
+import com.manager.taskmanager.global.log.annotation.SaveLogging;
 import com.manager.taskmanager.member.MemberService;
 import com.manager.taskmanager.member.entity.Member;
 import com.manager.taskmanager.project.entity.Project;
@@ -31,6 +32,7 @@ public class ProjectMemberService {
 
     // 프로젝트 멤버 추가
     @Transactional
+    @SaveLogging(eventName = "프로젝트 멤버 추가")
     public void addProjectMember(Long memberId, Long projectId, ProjectMemberRegisterDto dto) {
         ProjectMember projectMember = pmUtilService.getProjectMemberAndCheckLeader(memberId, projectId);
         Project project = projectMember.getProject();
@@ -81,6 +83,7 @@ public class ProjectMemberService {
 
     // 프로젝트 멤버 삭제(soft delete)
     @Transactional
+    @SaveLogging(eventName = "프로젝트 멤버 삭제")
     public void deleteProjectMember(Long loginId, Long projectId, Long memberId) {
         pmUtilService.getProjectMemberAndCheckLeader(loginId, projectId);
 
@@ -91,6 +94,7 @@ public class ProjectMemberService {
 
     // 프로젝트 멤버 정보 변경
     @Transactional
+    @SaveLogging(eventName = "프로젝트 멤버 정보 변경")
     public void updateProjectMember(Long loginId, Long projectId, Long memberId, ProjectMemberUpdateDto dto) {
         pmUtilService.getProjectMemberAndCheckLeader(loginId, projectId);
 

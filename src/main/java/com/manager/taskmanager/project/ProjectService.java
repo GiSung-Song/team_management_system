@@ -1,7 +1,8 @@
 package com.manager.taskmanager.project;
 
-import com.manager.taskmanager.common.CustomException;
-import com.manager.taskmanager.common.ErrorCode;
+import com.manager.taskmanager.global.error.CustomException;
+import com.manager.taskmanager.global.error.ErrorCode;
+import com.manager.taskmanager.global.log.annotation.SaveLogging;
 import com.manager.taskmanager.member.MemberService;
 import com.manager.taskmanager.member.entity.Member;
 import com.manager.taskmanager.project.dto.*;
@@ -13,7 +14,6 @@ import com.manager.taskmanager.projectmember.entity.ProjectRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +29,7 @@ public class ProjectService {
 
     // 프로젝트 생성 및 담당자 할당
     @Transactional
+    @SaveLogging(eventName = "프로젝트 생성")
     public void createProject(Long memberId, ProjectRegisterDto dto) {
         Member member = memberService.getActiveMemberById(memberId);
 
@@ -55,6 +56,7 @@ public class ProjectService {
 
     // 프로젝트 수정
     @Transactional
+    @SaveLogging(eventName = "프로젝트 수정")
     public void updateProject(Long memberId, Long projectId, ProjectUpdateDto dto) {
         ProjectMember projectMember = pmUtilService.getProjectMemberAndCheckLeader(memberId, projectId);
 
@@ -97,6 +99,7 @@ public class ProjectService {
 
     // 프로젝트 삭제
     @Transactional
+    @SaveLogging(eventName = "프로젝트 삭제")
     public void deleteProject(Long memberId, Long projectId) {
         ProjectMember projectMember = pmUtilService
                 .getProjectMemberAndCheckLeader(memberId, projectId);

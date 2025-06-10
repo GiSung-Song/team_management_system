@@ -1,7 +1,7 @@
 package com.manager.taskmanager.member;
 
 import com.manager.taskmanager.config.DBContainerExtension;
-import com.manager.taskmanager.config.security.CustomUserDetails;
+import com.manager.taskmanager.global.config.security.CustomUserDetails;
 import com.manager.taskmanager.department.DepartmentRepository;
 import com.manager.taskmanager.department.entity.Department;
 import com.manager.taskmanager.member.dto.MemberRegisterDto;

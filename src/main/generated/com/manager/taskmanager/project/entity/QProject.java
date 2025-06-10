@@ -20,7 +20,7 @@ public class QProject extends EntityPathBase<Project> {
 
     public static final QProject project = new QProject("project");
 
-    public final com.manager.taskmanager.common.QBaseTimeEntity _super = new com.manager.taskmanager.common.QBaseTimeEntity(this);
+    public final com.manager.taskmanager.global.entity.QBaseTimeEntity _super = new com.manager.taskmanager.global.entity.QBaseTimeEntity(this);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;

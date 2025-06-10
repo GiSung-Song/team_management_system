@@ -1,9 +1,13 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3308/task_manager?serverTimezone=UTC
+    url: jdbc:mysql://localhost:3307/team_project?serverTimezone=UTC
     username: gisung
     password: 1234
+
+  batch:
+    jdbc:
+      initialize-schema: always
 
   jpa:
     hibernate:
@@ -28,9 +32,3 @@ jwt:
 
   refresh:
     expiration: 604800000
-
-kafka:
-  bootstrap-server:
-    - localhost:10000
-    - localhost:10001
-    - localhost:10002
