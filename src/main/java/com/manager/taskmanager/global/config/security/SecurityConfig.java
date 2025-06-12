@@ -38,6 +38,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests((request) -> request
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
                         .requestMatchers(HttpMethod.POST, "/api/departments").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/api/departments/**").hasRole("MANAGER")
 
