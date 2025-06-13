@@ -20,3 +20,13 @@
 - **알림** - 조회, 읽음 처리, 삭제
 - **배치 작업** - 취소 상태인 오래된 업무 및 확인된 오래된 알림 삭제, 당일 미완료된 업무 알림 생성
 - **로그 모니터링** - AOP + ELK를 활용한 로그 수집 및 모니터링
+
+### API 문서(Swagger UI)
+<img src="./docs/member_projectMember_api.png" alt="Member ProjectMember API Screenshot" width="300" height="300">
+<img src="./docs/project_auth_api.png" alt="Project Auth API Screenshot" width="300" height="300">
+<img src="./docs/notification_department_api.png" alt="Notification Department API Screenshot" width="300" height="300">
+<img src="./docs/task_api.png" alt="Task API Screenshot" width="300" height="300">
+
+### LOG Monitoring (Kibana)
+<img src="./docs/kibana_discover.png" alt="Kibana Discover 화면" width="600">
+<img src="./docs/kibana_discover_logs.png" alt="Kibana 로그 상세 화면" width="600">

@@ -2,6 +2,7 @@ package com.manager.taskmanager.global.log.aop;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manager.taskmanager.auth.dto.LoginRequestDto;
+import com.manager.taskmanager.auth.dto.TokenDto;
 import com.manager.taskmanager.global.config.security.CustomUserDetails;
 import com.manager.taskmanager.global.log.annotation.SaveLogging;
 import com.manager.taskmanager.global.log.dto.LogEvent;
@@ -68,13 +69,15 @@ public class LoggingAspect {
 
         long duration = System.currentTimeMillis() - start;
 
+        Object maskingResult = makeMaskingObject(result);
+
         LogEvent successLog = LogEvent.success(
                 eventName,
                 className,
                 methodName,
                 employeeNumber,
                 maskingArgs,
-                result,
+                maskingResult,
                 duration
         );
 
@@ -121,6 +124,11 @@ public class LoggingAspect {
                     dto.getEmployeeNumber(),
                     "**********"
             );
+        } else if (arg instanceof TokenDto dto) {
+            return new TokenDto(
+                    makeMaskingToken(dto.getAccessToken()),
+                    makeMaskingToken(dto.getRefreshToken())
+            );
         }
 
         return arg;
@@ -143,5 +151,13 @@ public class LoggingAspect {
         }
 
         return phoneNumber.substring(0, 3) + "****" + phoneNumber.substring(phoneNumber.length() - 4);
+    }
+
+    private String makeMaskingToken(String token) {
+        if (token == null || !token.contains(".")) {
+            return token;
+        }
+
+        return token.substring(0, 10) + "..." + token.substring(token.length() - 4);
     }
 }
