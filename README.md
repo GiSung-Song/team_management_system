@@ -22,10 +22,16 @@
 - **로그 모니터링** - AOP + ELK를 활용한 로그 수집 및 모니터링
 
 ### API 문서(Swagger UI)
-<img src="./docs/member_projectMember_api.png" alt="Member ProjectMember API Screenshot" width="300" height="300">
-<img src="./docs/project_auth_api.png" alt="Project Auth API Screenshot" width="300" height="300">
-<img src="./docs/notification_department_api.png" alt="Notification Department API Screenshot" width="300" height="300">
-<img src="./docs/task_api.png" alt="Task API Screenshot" width="300" height="300">
+<table>
+  <tr>
+    <td><img src="./docs/member_projectMember_api.png" alt="Member ProjectMember API" width="300"/></td>
+    <td><img src="./docs/project_auth_api.png" alt="Project Auth API" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="./docs/notification_department_api.png" alt="Notification Department API" width="300"/></td>
+    <td><img src="./docs/task_api.png" alt="Task API" width="300"/></td>
+  </tr>
+</table>
 
 ### LOG Monitoring (Kibana)
 <img src="./docs/kibana_discover.png" alt="Kibana Discover 화면" width="600">
