@@ -30,3 +30,6 @@
 ### LOG Monitoring (Kibana)
 <img src="./docs/kibana_discover.png" alt="Kibana Discover 화면" width="600">
 <img src="./docs/kibana_discover_logs.png" alt="Kibana 로그 상세 화면" width="600">
+
+### BATCH JOB (Kibana Log)
+<img src="./docs/batch_log.png" alt="배치 작업 Kibana 로그 상세 화면" width="600">
