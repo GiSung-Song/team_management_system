@@ -1,7 +1,7 @@
 package com.manager.taskmanager.member;
 
-import com.manager.taskmanager.global.response.ApiResult;
 import com.manager.taskmanager.global.config.security.CustomUserDetails;
+import com.manager.taskmanager.global.response.ApiResult;
 import com.manager.taskmanager.member.dto.*;
 import com.manager.taskmanager.member.entity.Role;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,7 +56,7 @@ public class MemberController {
             @ApiResponse(responseCode = "201", description = "회원 가입 성공"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청(유효성 검사 실패)"),
             @ApiResponse(responseCode = "404", description = "잘못된 요청(부서 없음)"),
-            @ApiResponse(responseCode = "409", description = "잘못된 요청(사번/중복된 이메일/휴대폰 번호)")
+            @ApiResponse(responseCode = "409", description = "잘못된 요청(중복된 사번/이메일/휴대폰 번호)")
     })
     @PostMapping
     public ResponseEntity<ApiResult<Void>> registerMember(@RequestBody @Valid MemberRegisterDto dto) {

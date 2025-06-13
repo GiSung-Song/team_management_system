@@ -1,5 +1,6 @@
 package com.manager.taskmanager.global.log.aop;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manager.taskmanager.auth.dto.LoginRequestDto;
 import com.manager.taskmanager.global.config.security.CustomUserDetails;
 import com.manager.taskmanager.global.log.annotation.SaveLogging;
@@ -7,6 +8,7 @@ import com.manager.taskmanager.global.log.dto.LogEvent;
 import com.manager.taskmanager.member.dto.MemberRegisterDto;
 import com.manager.taskmanager.member.dto.MemberUpdateDto;
 import com.manager.taskmanager.member.dto.PasswordUpdateDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -20,7 +22,10 @@ import java.util.Arrays;
 @Slf4j
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class LoggingAspect {
+
+    private final ObjectMapper objectMapper;
 
     @Around("@annotation(saveLogging)")
     public Object saveLog(ProceedingJoinPoint joinPoint, SaveLogging saveLogging) throws Throwable {
@@ -54,7 +59,9 @@ public class LoggingAspect {
                     e.getMessage()
             );
 
-            log.error("{}", errorLog, e);
+            String jsonData = objectMapper.writeValueAsString(errorLog);
+
+            log.error(jsonData, e);
 
             throw e;
         }
@@ -71,7 +78,8 @@ public class LoggingAspect {
                 duration
         );
 
-        log.info("{}", successLog);
+        String jsonData = objectMapper.writeValueAsString(successLog);
+        log.info(jsonData);
 
         return result;
     }

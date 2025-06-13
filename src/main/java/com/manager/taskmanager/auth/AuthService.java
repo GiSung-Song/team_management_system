@@ -2,10 +2,10 @@ package com.manager.taskmanager.auth;
 
 import com.manager.taskmanager.auth.dto.LoginRequestDto;
 import com.manager.taskmanager.auth.dto.TokenDto;
-import com.manager.taskmanager.global.error.CustomException;
-import com.manager.taskmanager.global.error.ErrorCode;
 import com.manager.taskmanager.global.config.security.JwtPayloadDto;
 import com.manager.taskmanager.global.config.security.JwtTokenUtil;
+import com.manager.taskmanager.global.error.CustomException;
+import com.manager.taskmanager.global.error.ErrorCode;
 import com.manager.taskmanager.global.log.annotation.SaveLogging;
 import com.manager.taskmanager.member.MemberRepository;
 import com.manager.taskmanager.member.entity.Member;
@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +30,7 @@ public class AuthService {
 
     // 로그인
     @SaveLogging(eventName = "로그인")
+    @Transactional(readOnly = true)
     public TokenDto login(LoginRequestDto dto) {
         Member member = memberRepository.findByEmployeeNumberAndDeletedAtIsNull(dto.getEmployeeNumber())
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CREDENTIALS));
@@ -63,6 +65,7 @@ public class AuthService {
     }
 
     // 토큰 재발급
+    @Transactional(readOnly = true)
     public TokenDto reIssueToken(String refreshToken) {
         if (refreshToken == null) {
             throw new CustomException(ErrorCode.INVALID_TOKEN);

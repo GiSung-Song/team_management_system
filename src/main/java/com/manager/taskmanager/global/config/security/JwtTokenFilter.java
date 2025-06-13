@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,11 +27,24 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private final JwtTokenUtil jwtTokenUtil;
     private final RedisTemplate<String, String> redisTemplate;
 
+    private final List<PermitPass> PASS_PATHS = List.of(
+            new PermitPass(HttpMethod.GET, "/api/departments"),
+            new PermitPass(HttpMethod.POST, "/api/members"),
+            new PermitPass(HttpMethod.POST, "/api/auth/login"),
+            new PermitPass(HttpMethod.POST, "/api/auth/reIssue"),
+            new PermitPass(null, "/v3/api-docs"),
+            new PermitPass(null, "/swagger-ui")
+    );
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
+        String method = request.getMethod();
 
-        if (requestURI.startsWith("/v3/api-docs") || requestURI.startsWith("/swagger-ui")) {
+        boolean isPermit = PASS_PATHS.stream()
+                .anyMatch(p -> p.matches(method, requestURI));
+
+        if (isPermit) {
             filterChain.doFilter(request, response);
             return;
         }
